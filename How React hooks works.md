@@ -75,7 +75,7 @@ important Note - each line of the code that will come next are part of the tutor
 follow along. these examples are self-explanatory.
 
 code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
-webpage of sandbox(examples on full screen): <https://plv3i.csb.app/>  
+webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
 GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
 
 ### Basic
@@ -141,8 +141,7 @@ as we explained earlier, the function body fire first and then the effects.
 
 </details>
 
-
-[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
 
 </details>
 
@@ -183,7 +182,7 @@ this is because effect hooks from the same type(here `useEffect`) are scheduled 
 executed in the order of declaration, this is common mistake to think that useEffect with empty dependency array will
 fire on mount and on a different phase from useEffect with no dependency array.
 
-[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
 
 </details>
 
@@ -236,7 +235,7 @@ const Basic = () => {
  */
 ```
 
-[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
 
 </details>
 
@@ -270,7 +269,7 @@ const BasicUnmount = () => {
 };
 ```
 
-[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
 
 </details>
 
@@ -302,7 +301,7 @@ const ReactComponent = () => {
 
 ```
 
-[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
 
 </details>
 
@@ -355,6 +354,8 @@ const UpdateCycle = () => {
 
 as we can see, we forced React to re-call the function body 10 times before performing the render. we can also notice
 that the render phase occurred 0.245ms after the last update call.
+
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=UpdateCycle&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark)
 
 </details>
 
@@ -409,6 +410,8 @@ const RenderCycle = () => {
 ```
 
 we can see that each render cycles comes with update call.
+
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=RenderCycle&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark)
 
 </details>
 
@@ -469,6 +472,9 @@ const CombinedCycle = () => {
  * render {call:15,render:3}(CombinedCycle) 0.085ms
  */
 ```
+
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=CombinedCycle&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark)
+
 
 </details>
 
@@ -547,6 +553,8 @@ the entire tree goes through the phase of update, and only then the effects are 
 ```
 
 </details>
+
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=MultipleComponents&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark)
 
 </details>
 
