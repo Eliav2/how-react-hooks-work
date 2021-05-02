@@ -57,6 +57,8 @@ article.
 
 ## The different phases of a React component
 
+these are the phases of a render:
+
 - update call - the moment FC body is executed.
 - useLayoutEffect - it is triggered immediately after all the scheduled mutations has been flushed into to DOM, and
   before useEffect.  
@@ -64,10 +66,16 @@ article.
   > Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
 - useEffect - it is triggered after _all_ scheduled updates calls has been executed.
 
+after these phases, the 'render' step is completed and then ReactDOM will do the 'commit' step which basically just
+saying updating the browser's DOM based on the virtual DOM created by the render step.
+
 ## Examples
 
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
 follow along. these examples are self-explanatory.
+
+code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>  
+repo: <https://github.com/Eliav2/how-react-hooks-work>
 
 ### Basic
 
@@ -174,7 +182,6 @@ this is because effect hooks from the same type(here `useEffect`) are scheduled 
 executed in the order of declaration, this is common mistake to think that useEffect with empty dependency array will
 fire on mount and on a different phase from useEffect with no dependency array.
 
-
 [code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
 
 </details>
@@ -228,7 +235,6 @@ const Basic = () => {
  */
 ```
 
-
 [code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
 
 </details>
@@ -263,7 +269,6 @@ const BasicUnmount = () => {
 };
 ```
 
-
 [code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
 
 </details>
@@ -296,12 +301,176 @@ const ReactComponent = () => {
 
 ```
 
-
 [code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
 
 </details>
 
-A React component has different stages before it finally gets rendered.
+### UpdateCycle
+
+<details>
+
+when you set state while in the update phase another update phase will be scheduled by react. let's try force React to
+trigger 10 update calls before rendering.
+
+```jsx
+const UpdateCycle = () => {
+    const log = useLog("BasicUnmount");
+    const [, setState] = useState({});
+    const forceUpdate = () => setState({});
+    const updateCalls = useRef(0);
+
+    const HandleClick = () => {
+        updateCalls.current = 0;
+        forceUpdate();
+    };
+    updateCalls.current += 1;
+    if (updateCalls.current < 10) forceUpdate();
+
+    useEffect(() => {
+        log("render");
+    });
+    log("update");
+
+    return (
+        <div style={boxStyle} onClick={HandleClick}>
+            click
+        </div>
+    );
+    /**
+     * update {call:1,render:0}(BasicUnmount) 0.33ms
+     * update {call:2,render:0}(BasicUnmount) 0.17ms
+     * update {call:3,render:0}(BasicUnmount) 0.03ms
+     * update {call:4,render:0}(BasicUnmount) 0.025ms
+     * update {call:5,render:0}(BasicUnmount) 0.045ms
+     * update {call:6,render:0}(BasicUnmount) 0.04ms
+     * update {call:7,render:0}(BasicUnmount) 0.03ms
+     * update {call:8,render:0}(BasicUnmount) 0.02ms
+     * update {call:9,render:0}(BasicUnmount) 0.03ms
+     * update {call:10,render:0}(BasicUnmount) 0.015ms
+     * render {call:10,render:1}(BasicUnmount) 0.245ms
+     */
+};
+```
+
+as we can see, we forced React to re-call the function body 10 times before performing the render. we can also notice
+that the render phase occurred 0.245ms after the last update call.
+
+</details>
+
+### RenderCycle
+
+<details>
+
+Ok, so we saw what happens when you update the state while in the update phase, but what happens if you try to update
+the state when you are no longer in the update state? well, React will schedule an entire re-render cycle for the
+component. each render cycle will also include at least one update call.  
+let's force 5 render cycles:
+
+```jsx
+const RenderCycle = () => {
+    const log = useLog("BasicUnmount");
+    const [, setState] = useState({});
+    const forceRender = () => setState({});
+    const renderCalls = useRef(0);
+
+    const HandleClick = () => {
+        renderCalls.current = 0;
+        forceRender();
+    };
+
+    useEffect(() => {
+        renderCalls.current += 1;
+        if (renderCalls.current < 5) forceRender();
+        log("render");
+    });
+    log("update");
+
+    return (
+        <div style={boxStyle} onClick={HandleClick}>
+            click
+        </div>
+    );
+    /**
+     * update {call:1,render:0}(BasicUnmount) 0.365ms
+     * render {call:1,render:1}(BasicUnmount) 0.33ms
+     * update {call:2,render:1}(BasicUnmount) 0.26ms
+     * render {call:2,render:2}(BasicUnmount) 0.315ms
+     * update {call:3,render:2}(BasicUnmount) 0.12ms
+     * render {call:3,render:3}(BasicUnmount) 0.25ms
+     * update {call:4,render:3}(BasicUnmount) 0.07ms
+     * render {call:4,render:4}(BasicUnmount) 0.495ms
+     * update {call:5,render:4}(BasicUnmount) 0.055ms
+     * render {call:5,render:5}(BasicUnmount) 0.135ms
+     */
+};
+
+
+```
+
+we can see that each render cycles comes with update call.
+
+</details>
+
+### CombinedCycle
+
+<details>
+
+now lets say we want 5 update calls for each render. let's force 3 renders:
+```jsx
+const CombinedCycle = () => {
+  const log = useLog("BasicUnmount");
+  const [, setState] = useState({});
+  const forceUpdate = () => setState({});
+  const updateCalls = useRef(0);
+  const renderCalls = useRef(0);
+
+  const HandleClick = () => {
+    updateCalls.current = 0;
+    renderCalls.current = 0;
+    forceUpdate();
+  };
+  updateCalls.current += 1;
+  if (updateCalls.current < 5) forceUpdate();
+
+  useEffect(() => {
+    renderCalls.current += 1;
+    if (renderCalls.current < 3) forceUpdate();
+    updateCalls.current = 0;
+    log("render");
+  });
+  log("update");
+
+  return (
+    <div style={boxStyle} onClick={HandleClick}>
+      click
+    </div>
+  );
+};
+/**
+ * update {call:1,render:0}(BasicUnmount) 0.085ms
+ * update {call:2,render:0}(BasicUnmount) 0.17ms
+ * update {call:3,render:0}(BasicUnmount) 0.03ms
+ * update {call:4,render:0}(BasicUnmount) 0.025ms
+ * update {call:5,render:0}(BasicUnmount) 0.03ms
+ * render {call:5,render:1}(BasicUnmount) 0.29ms
+ * update {call:6,render:1}(BasicUnmount) 0.03ms
+ * update {call:7,render:1}(BasicUnmount) 0.095ms
+ * update {call:8,render:1}(BasicUnmount) 0.02ms
+ * update {call:9,render:1}(BasicUnmount) 0.04ms
+ * update {call:10,render:1}(BasicUnmount) 0.025ms
+ * render {call:10,render:2}(BasicUnmount) 0.08ms
+ * update {call:11,render:2}(BasicUnmount) 0.055ms
+ * update {call:12,render:2}(BasicUnmount) 0.085ms
+ * update {call:13,render:2}(BasicUnmount) 0.025ms
+ * update {call:14,render:2}(BasicUnmount) 0.03ms
+ * update {call:15,render:2}(BasicUnmount) 0.03ms
+ * render {call:15,render:3}(BasicUnmount) 0.085ms
+ */
+```
+
+</details>
+
+
 
 
 
