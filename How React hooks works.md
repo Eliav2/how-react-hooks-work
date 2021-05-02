@@ -58,12 +58,11 @@ article.
 ## The different phases of a React component
 
 - update call - the moment FC body is executed.
-- useLayoutEffect - it is triggered immediately after all the scheduled mutations has been flushed into to DOM, and 
+- useLayoutEffect - it is triggered immediately after all the scheduled mutations has been flushed into to DOM, and
   before useEffect.  
   the docs say:
   > Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
 - useEffect - it is triggered after _all_ scheduled updates calls has been executed.
-
 
 ## Examples
 
@@ -71,6 +70,8 @@ important Note - each line of the code that will come next are part of the tutor
 follow along. these examples are self-explanatory.
 
 ### Basic
+
+<details open>
 
 OK enough words. see the next example.
 
@@ -112,6 +113,10 @@ what order of logs would you expect when the component mounts? think for a secon
  */
 ```
 
+<details>
+
+<summary>Reveal answer</summary>
+
 well, the order is:
 
 ```jsx
@@ -124,6 +129,17 @@ well, the order is:
 ```
 
 as we explained earlier, the function body fire first and then the effects.
+
+</details>
+
+
+[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
+
+</details>
+
+### BasicReverse
+
+<details>
 
 what will happen if we will replace the effects, does the order will change?
 
@@ -158,33 +174,42 @@ this is because effect hooks from the same type(here `useEffect`) are scheduled 
 executed in the order of declaration, this is common mistake to think that useEffect with empty dependency array will
 fire on mount and on a different phase from useEffect with no dependency array.
 
+
+[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
+
+</details>
+
+### useLog
+
+<details>
+
 now let's create a log helper hook `useLog` that will let us keep track of the component phase for later examples:
 
 ```jsx
 const useLog = (componentName = '', effect = useEffect) => {
-  // keep track of phase
-  const render = useRef(0);
-  const call = useRef(0);
+    // keep track of phase
+    const render = useRef(0);
+    const call = useRef(0);
 
-  // keep track of how much time from update call to end of effect
-  const startTime = performance.now();
-  const callToEffectTime = useRef(0);
+    // keep track of how much time from update call to end of effect
+    const startTime = performance.now();
+    const callToEffectTime = useRef(0);
 
-  const consoleState = () =>
-          `{call:${call.current},render:${render.current}}(${componentName}) ${callToEffectTime.current}ms`;
-  const log = (...args) => console.log(...args, consoleState());
+    const consoleState = () =>
+        `{call:${call.current},render:${render.current}}(${componentName}) ${callToEffectTime.current}ms`;
+    const log = (...args) => console.log(...args, consoleState());
 
-  effect(() => {
-    render.current += 1;
-    callToEffectTime.current = Math.round((performance.now() - startTime) * 100) / 100;
-  });
-  call.current += 1;
+    effect(() => {
+        render.current += 1;
+        callToEffectTime.current = Math.round((performance.now() - startTime) * 100) / 100;
+    });
+    call.current += 1;
 
-  return log;
+    return log;
 };
 ```
-`render.current` and `call.current` will 'tick' in the same rate of the parent component because of hooks 
-natures. 
+
+`render.current` and `call.current` will 'tick' in the same rate of the parent component because of hooks natures.
 
 and usage:
 
@@ -203,38 +228,52 @@ const Basic = () => {
  */
 ```
 
+
+[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
+
+</details>
+
 ### unmount
 
+<details>
+
 if we will trigger unmount after mount the logs order will be:
+
 ```jsx
 const BasicUnmount = () => {
-  const log = useLog();
-  useEffect(() => {
-    log('mount');
-    return () => log('unmount');
-  }, []);
-  useEffect(() => {
-    log('render');
-    return () => log('un-render');
-  });
-  log('update call');
-  return <div>asd</div>;
-  /**
-   * expected logs:
-   *    update call {call:1,render:0}
-   *    mount {call:1,render:1}
-   *    render {call:1,render:1}
-   *    unmount {call:1,render:1}
-   *    un-render {call:1,render:1}
-   */
+    const log = useLog();
+    useEffect(() => {
+        log('mount');
+        return () => log('unmount');
+    }, []);
+    useEffect(() => {
+        log('render');
+        return () => log('un-render');
+    });
+    log('update call');
+    return <div>asd</div>;
+    /**
+     * expected logs:
+     *    update call {call:1,render:0}
+     *    mount {call:1,render:1}
+     *    render {call:1,render:1}
+     *    unmount {call:1,render:1}
+     *    un-render {call:1,render:1}
+     */
 };
-
 ```
 
 
+[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
+
+</details>
+
 ### Effect vs LayoutEffect
 
+<details>
+
 useLayoutEffect is executed after useEffect:
+
 ```jsx
 const ReactComponent = () => {
     useEffect(() => {
@@ -257,4 +296,13 @@ const ReactComponent = () => {
 
 ```
 
+
+[code sandbox](https://codesandbox.io/embed/epic-sara-plv3i?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
+
+</details>
+
 A React component has different stages before it finally gets rendered.
+
+
+
+

@@ -24,7 +24,7 @@ const ExamplePage = () => {
       <header style={titleStyle}>how React hooks work</header>
       <hr />
       <p style={{ textAlign: "center" }}>
-        schedule a callback for later renders!
+        understand how react hooks really works!
         <br />
         <br />
         <a
