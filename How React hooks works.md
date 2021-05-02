@@ -1,14 +1,14 @@
 # How React hooks work - in depth
 
-in simple cases, React Hooks will magically do exactly what you meant for, but in other cases their behavior can feel
+In simple cases, React Hooks will magically do exactly what you meant for, but in other cases their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
 The article's focus is on hooks behavior, and I will assume that you have some experience with React and React hooks.
 
 ### Definitions
 
-I strongly recommend reading the definitions section. if you're like me and hates a lot of words, you can start from the
-example section and then return to the definitions section if something is not clear.
+If you are not a React expert, It is strongly recommend reading the definitions section. You can start from the 
+example section and then return to this section later if something is not clear.
 
 the more important definitions here are: **render**, **update**, **react hook** and **phase**.
 
@@ -33,7 +33,7 @@ the more important definitions here are: **render**, **update**, **react hook** 
   only inside a body of a function component - hook is `hooked` to the parent component stateful logic. when the parent
   component updates, also the hook updates, and when the effects of the FC is fired also the effects of the hook is
   fired.
-- **a component's phase** - this is not official term, I'm using this term in this tutorial to describe a different
+- **a component's _phase_** - this is not official term, I'm using this term in this tutorial to describe a different
   point of time in a React component.
 
 Note - These definitions are my summary and may not be accurate, but they are sufficient to understand the rest of the
@@ -46,7 +46,7 @@ article.
 - [State hooks](https://reactjs.org/docs/hooks-overview.html#state-hook) - like `useState` or `useReducer`. these hooks
   use and possibly manipulates the parent component stateful logic.
 - [Effect hooks](https://reactjs.org/docs/hooks-overview.html#effect-hook) - one of `useEffect` or `useLayoutEffect`.
-  these hooks receives a callback function and usually a dependency array. the callback function will be scheduled by
+  these hooks receive a callback function and usually a dependency array. the callback function will be scheduled by
   React to fire on a later _phase_(see definition above). the exact phase is dependent on the effect that was chosen.  
   **Effects from the same type will be executed in the order of declaration.**
 
@@ -277,7 +277,7 @@ const BasicUnmount = () => {
 
 <details>
 
-useLayoutEffect is executed after useEffect:
+useLayoutEffect is executed before useEffect:
 
 ```jsx
 const ReactComponent = () => {
@@ -363,8 +363,8 @@ that the render phase occurred 0.245ms after the last update call.
 
 <details>
 
-Ok, so we saw what happens when you update the state while in the update phase, but what happens if you try to update
-the state when you are no longer in the update state? well, React will schedule an entire re-render cycle for the
+Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update
+the state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the
 component. each render cycle will also include at least one update call.  
 let's force 5 render cycles:
 
