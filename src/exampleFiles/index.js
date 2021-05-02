@@ -6,6 +6,7 @@ import UpdateCycle from "./UpdateCycle";
 import RenderCycle from "./RenderCycle";
 import CombinedCycle from "./CombinedCycle";
 import HomePage from "./Home";
+import MultipleComponents from "./MultipleComponents";
 
 export const BasicExamples = {
   HomePage,
@@ -36,4 +37,8 @@ export const InterestingExamples = {
     component: CombinedCycle,
     description: "combines the logic for UpdateCycle and RenderCycle.",
   },
+};
+
+export const ChallengingExamples = {
+  MultipleComponents,
 };

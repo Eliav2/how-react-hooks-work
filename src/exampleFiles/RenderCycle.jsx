@@ -3,7 +3,7 @@ import { useLog } from "../UseLog";
 import { boxStyle } from "../App";
 
 const RenderCycle = () => {
-  const log = useLog("BasicUnmount");
+  const log = useLog("RenderCycle");
   const [, setState] = useState({});
   const forceRender = () => setState({});
   const renderCalls = useRef(0);
@@ -22,7 +22,7 @@ const RenderCycle = () => {
 
   return (
     <div style={boxStyle} onClick={HandleClick}>
-      click
+      RenderCycle
     </div>
   );
   /**

@@ -1,6 +1,10 @@
 import React from "react";
 
-import { BasicExamples, InterestingExamples } from "./exampleFiles";
+import {
+  BasicExamples,
+  ChallengingExamples,
+  InterestingExamples,
+} from "./exampleFiles";
 
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 
@@ -23,7 +27,7 @@ export const boxStyle = {
   border: "1px #999 solid",
   borderRadius: "10px",
   textAlign: "center",
-  width: "100px",
+  width: "150px",
   height: "30px",
   color: "black",
 };
@@ -117,64 +121,12 @@ const ExamplePage = () => {
       </div>
       <Router>
         <Pages
-          pages={{ Basic: BasicExamples, Interesting: InterestingExamples }}
+          pages={{
+            Basic: BasicExamples,
+            Interesting: InterestingExamples,
+            Challenging: ChallengingExamples,
+          }}
         />
-        {/*<div>*/}
-        {/*  <div*/}
-        {/*    style={{*/}
-        {/*      display: "flex",*/}
-        {/*      justifyContent: "center",*/}
-        {/*      flexWrap: "wrap",*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <Link to="/">*/}
-        {/*      <button>home</button>*/}
-        {/*    </Link>*/}
-        {/*    {Object.keys(BasicExamples).map((exampleName) => (*/}
-        {/*      <Link to={"/" + exampleName} key={exampleName}>*/}
-        {/*        <button>{exampleName}</button>*/}
-        {/*      </Link>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-        {/*<div style={{ textAlign: "center" }}>*/}
-        {/*  <br />*/}
-        {/*  These example means nothing if you don't look in the code,*/}
-        {/*  <br />*/}
-        {/*  fork this sandbox and play with the examples below*/}
-        {/*  <br />*/}
-        {/*</div>*/}
-        {/*<Switch>*/}
-        {/*  <Route exact path="/">*/}
-        {/*    <div style={{ textAlign: "center" }}>*/}
-        {/*      <h2>choose any example</h2>*/}
-        {/*      <h5>*/}
-        {/*        see each example file at <code>/src/examplesFiles</code>{" "}*/}
-        {/*      </h5>*/}
-        {/*    </div>*/}
-        {/*  </Route>*/}
-        {/*  {Object.keys(BasicExamples).map((exampleName) => {*/}
-        {/*    const Component =*/}
-        {/*      BasicExamples[exampleName]?.component ??*/}
-        {/*      BasicExamples[exampleName];*/}
-        {/*    return (*/}
-        {/*      <Route path={"/" + exampleName} key={exampleName}>*/}
-        {/*        /!*<Component />*!/*/}
-        {/*        <React.Fragment>*/}
-        {/*          <h3>*/}
-        {/*            <u>{exampleName}:</u>*/}
-        {/*          </h3>*/}
-        {/*          <p>*/}
-        {/*            {BasicExamples[exampleName]?.description ?? Component.name}*/}
-        {/*          </p>*/}
-        {/*          <div style={canvasStyle} id="canvas">*/}
-        {/*            <Component />*/}
-        {/*          </div>*/}
-        {/*        </React.Fragment>*/}
-        {/*      </Route>*/}
-        {/*    );*/}
-        {/*  })}*/}
-        {/*</Switch>*/}
       </Router>
     </div>
   );

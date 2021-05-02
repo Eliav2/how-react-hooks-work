@@ -74,8 +74,9 @@ saying updating the browser's DOM based on the virtual DOM created by the render
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
 follow along. these examples are self-explanatory.
 
-code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>  
-repo: <https://github.com/Eliav2/how-react-hooks-work>
+code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
+webpage of sandbox(examples on full screen): <https://plv3i.csb.app/>  
+GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
 
 ### Basic
 
@@ -314,7 +315,7 @@ trigger 10 update calls before rendering.
 
 ```jsx
 const UpdateCycle = () => {
-    const log = useLog("BasicUnmount");
+    const log = useLog("UpdateCycle");
     const [, setState] = useState({});
     const forceUpdate = () => setState({});
     const updateCalls = useRef(0);
@@ -337,17 +338,17 @@ const UpdateCycle = () => {
         </div>
     );
     /**
-     * update {call:1,render:0}(BasicUnmount) 0.33ms
-     * update {call:2,render:0}(BasicUnmount) 0.17ms
-     * update {call:3,render:0}(BasicUnmount) 0.03ms
-     * update {call:4,render:0}(BasicUnmount) 0.025ms
-     * update {call:5,render:0}(BasicUnmount) 0.045ms
-     * update {call:6,render:0}(BasicUnmount) 0.04ms
-     * update {call:7,render:0}(BasicUnmount) 0.03ms
-     * update {call:8,render:0}(BasicUnmount) 0.02ms
-     * update {call:9,render:0}(BasicUnmount) 0.03ms
-     * update {call:10,render:0}(BasicUnmount) 0.015ms
-     * render {call:10,render:1}(BasicUnmount) 0.245ms
+     * update {call:1,render:0}(UpdateCycle) 0.33ms
+     * update {call:2,render:0}(UpdateCycle) 0.17ms
+     * update {call:3,render:0}(UpdateCycle) 0.03ms
+     * update {call:4,render:0}(UpdateCycle) 0.025ms
+     * update {call:5,render:0}(UpdateCycle) 0.045ms
+     * update {call:6,render:0}(UpdateCycle) 0.04ms
+     * update {call:7,render:0}(UpdateCycle) 0.03ms
+     * update {call:8,render:0}(UpdateCycle) 0.02ms
+     * update {call:9,render:0}(UpdateCycle) 0.03ms
+     * update {call:10,render:0}(UpdateCycle) 0.015ms
+     * render {call:10,render:1}(UpdateCycle) 0.245ms
      */
 };
 ```
@@ -368,7 +369,7 @@ let's force 5 render cycles:
 
 ```jsx
 const RenderCycle = () => {
-    const log = useLog("BasicUnmount");
+    const log = useLog("RenderCycle");
     const [, setState] = useState({});
     const forceRender = () => setState({});
     const renderCalls = useRef(0);
@@ -391,16 +392,16 @@ const RenderCycle = () => {
         </div>
     );
     /**
-     * update {call:1,render:0}(BasicUnmount) 0.365ms
-     * render {call:1,render:1}(BasicUnmount) 0.33ms
-     * update {call:2,render:1}(BasicUnmount) 0.26ms
-     * render {call:2,render:2}(BasicUnmount) 0.315ms
-     * update {call:3,render:2}(BasicUnmount) 0.12ms
-     * render {call:3,render:3}(BasicUnmount) 0.25ms
-     * update {call:4,render:3}(BasicUnmount) 0.07ms
-     * render {call:4,render:4}(BasicUnmount) 0.495ms
-     * update {call:5,render:4}(BasicUnmount) 0.055ms
-     * render {call:5,render:5}(BasicUnmount) 0.135ms
+     * update {call:1,render:0}(RenderCycle) 0.365ms
+     * render {call:1,render:1}(RenderCycle) 0.33ms
+     * update {call:2,render:1}(RenderCycle) 0.26ms
+     * render {call:2,render:2}(RenderCycle) 0.315ms
+     * update {call:3,render:2}(RenderCycle) 0.12ms
+     * render {call:3,render:3}(RenderCycle) 0.25ms
+     * update {call:4,render:3}(RenderCycle) 0.07ms
+     * render {call:4,render:4}(RenderCycle) 0.495ms
+     * update {call:5,render:4}(RenderCycle) 0.055ms
+     * render {call:5,render:5}(RenderCycle) 0.135ms
      */
 };
 
@@ -416,62 +417,137 @@ we can see that each render cycles comes with update call.
 <details>
 
 now lets say we want 5 update calls for each render. let's force 3 renders:
+
 ```jsx
 const CombinedCycle = () => {
-  const log = useLog("BasicUnmount");
-  const [, setState] = useState({});
-  const forceUpdate = () => setState({});
-  const updateCalls = useRef(0);
-  const renderCalls = useRef(0);
+    const log = useLog("CombinedCycle");
+    const [, setState] = useState({});
+    const forceUpdate = () => setState({});
+    const updateCalls = useRef(0);
+    const renderCalls = useRef(0);
 
-  const HandleClick = () => {
-    updateCalls.current = 0;
-    renderCalls.current = 0;
-    forceUpdate();
-  };
-  updateCalls.current += 1;
-  if (updateCalls.current < 5) forceUpdate();
+    const HandleClick = () => {
+        updateCalls.current = 0;
+        renderCalls.current = 0;
+        forceUpdate();
+    };
+    updateCalls.current += 1;
+    if (updateCalls.current < 5) forceUpdate();
 
-  useEffect(() => {
-    renderCalls.current += 1;
-    if (renderCalls.current < 3) forceUpdate();
-    updateCalls.current = 0;
-    log("render");
-  });
-  log("update");
+    useEffect(() => {
+        renderCalls.current += 1;
+        if (renderCalls.current < 3) forceUpdate();
+        updateCalls.current = 0;
+        log("render");
+    });
+    log("update");
 
-  return (
-    <div style={boxStyle} onClick={HandleClick}>
-      click
-    </div>
-  );
+    return (
+        <div style={boxStyle} onClick={HandleClick}>
+            click
+        </div>
+    );
 };
 /**
- * update {call:1,render:0}(BasicUnmount) 0.085ms
- * update {call:2,render:0}(BasicUnmount) 0.17ms
- * update {call:3,render:0}(BasicUnmount) 0.03ms
- * update {call:4,render:0}(BasicUnmount) 0.025ms
- * update {call:5,render:0}(BasicUnmount) 0.03ms
- * render {call:5,render:1}(BasicUnmount) 0.29ms
- * update {call:6,render:1}(BasicUnmount) 0.03ms
- * update {call:7,render:1}(BasicUnmount) 0.095ms
- * update {call:8,render:1}(BasicUnmount) 0.02ms
- * update {call:9,render:1}(BasicUnmount) 0.04ms
- * update {call:10,render:1}(BasicUnmount) 0.025ms
- * render {call:10,render:2}(BasicUnmount) 0.08ms
- * update {call:11,render:2}(BasicUnmount) 0.055ms
- * update {call:12,render:2}(BasicUnmount) 0.085ms
- * update {call:13,render:2}(BasicUnmount) 0.025ms
- * update {call:14,render:2}(BasicUnmount) 0.03ms
- * update {call:15,render:2}(BasicUnmount) 0.03ms
- * render {call:15,render:3}(BasicUnmount) 0.085ms
+ * update {call:1,render:0}(CombinedCycle) 0.085ms
+ * update {call:2,render:0}(CombinedCycle) 0.17ms
+ * update {call:3,render:0}(CombinedCycle) 0.03ms
+ * update {call:4,render:0}(CombinedCycle) 0.025ms
+ * update {call:5,render:0}(CombinedCycle) 0.03ms
+ * render {call:5,render:1}(CombinedCycle) 0.29ms
+ * update {call:6,render:1}(CombinedCycle) 0.03ms
+ * update {call:7,render:1}(CombinedCycle) 0.095ms
+ * update {call:8,render:1}(CombinedCycle) 0.02ms
+ * update {call:9,render:1}(CombinedCycle) 0.04ms
+ * update {call:10,render:1}(CombinedCycle) 0.025ms
+ * render {call:10,render:2}(CombinedCycle) 0.08ms
+ * update {call:11,render:2}(CombinedCycle) 0.055ms
+ * update {call:12,render:2}(CombinedCycle) 0.085ms
+ * update {call:13,render:2}(CombinedCycle) 0.025ms
+ * update {call:14,render:2}(CombinedCycle) 0.03ms
+ * update {call:15,render:2}(CombinedCycle) 0.03ms
+ * render {call:15,render:3}(CombinedCycle) 0.085ms
  */
 ```
 
 </details>
 
+### MultipleComponents
 
+<details>
 
+Let's combine the last 3 examples into common parent.
 
+```jsx
+import UpdateCycle from "./UpdateCycle";
+import RenderCycle from "./RenderCycle";
+import CombinedCycle from "./CombinedCycle";
+
+const Example = () => (
+    <>
+        <UpdateCycle/>
+        <RenderCycle/>
+        <CombinedCycle/>
+    </>
+);
+
+```
+
+now stop. think. what would you expect? does each component will go through her own update-render phases or maybe the
+update calls will occur one after another and then the effects one after another?
+
+<details>
+
+<summary>Reveal answer</summary>
+
+the entire tree goes through the phase of update, and only then the effects are fired.
+
+```jsx
+    /**
+ * update {call:1,render:0}(UpdateCycle) 0.505ms
+ * update {call:2,render:0}(UpdateCycle) 0.22ms
+ * update {call:3,render:0}(UpdateCycle) 0.03ms
+ * update {call:4,render:0}(UpdateCycle) 0.035ms
+ * update {call:5,render:0}(UpdateCycle) 0.075ms
+ * update {call:6,render:0}(UpdateCycle) 0.05ms
+ * update {call:7,render:0}(UpdateCycle) 0.04ms
+ * update {call:8,render:0}(UpdateCycle) 0.04ms
+ * update {call:9,render:0}(UpdateCycle) 0.045ms
+ * update {call:10,render:0}(UpdateCycle) 0.025ms
+ * update {call:1,render:0}(RenderCycle) 0.035ms
+ * update {call:1,render:0}(CombinedCycle) 0.065ms
+ * update {call:2,render:0}(CombinedCycle) 0.06ms
+ * update {call:3,render:0}(CombinedCycle) 0.065ms
+ * update {call:4,render:0}(CombinedCycle) 0.045ms
+ * update {call:5,render:0}(CombinedCycle) 0.04ms
+ * render {call:10,render:1}(UpdateCycle) 0.15ms
+ * render {call:1,render:1}(RenderCycle) 0.33ms
+ * render {call:5,render:1}(CombinedCycle) 0.17ms
+ * update {call:2,render:1}(RenderCycle) 0.295ms
+ * update {call:6,render:1}(CombinedCycle) 0.045ms
+ * update {call:7,render:1}(CombinedCycle) 0.045ms
+ * update {call:8,render:1}(CombinedCycle) 0.04ms
+ * update {call:9,render:1}(CombinedCycle) 0.06ms
+ * update {call:10,render:1}(CombinedCycle) 0.04ms
+ * render {call:2,render:2}(RenderCycle) 0.145ms
+ * render {call:10,render:2}(CombinedCycle) 0.145ms
+ * update {call:3,render:2}(RenderCycle) 0.055ms
+ * update {call:11,render:2}(CombinedCycle) 0.05ms
+ * update {call:12,render:2}(CombinedCycle) 0.085ms
+ * update {call:13,render:2}(CombinedCycle) 0.03ms
+ * update {call:14,render:2}(CombinedCycle) 0.015ms
+ * update {call:15,render:2}(CombinedCycle) 0.02ms
+ * render {call:3,render:3}(RenderCycle) 0.125ms
+ * render {call:15,render:3}(CombinedCycle) 0.075ms
+ * update {call:4,render:3}(RenderCycle) 0.06ms
+ * render {call:4,render:4}(RenderCycle) 0.135ms
+ * update {call:5,render:4}(RenderCycle) 0.025ms
+ * render {call:5,render:5}(RenderCycle) 0.06ms
+ */
+```
+
+</details>
+
+</details>
 
 

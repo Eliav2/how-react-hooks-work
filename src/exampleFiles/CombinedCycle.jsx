@@ -3,7 +3,7 @@ import { useLog } from "../UseLog";
 import { boxStyle } from "../App";
 
 const CombinedCycle = () => {
-  const log = useLog("BasicUnmount");
+  const log = useLog("CombinedCycle");
   const [, setState] = useState({});
   const forceUpdate = () => setState({});
   const updateCalls = useRef(0);
@@ -27,7 +27,7 @@ const CombinedCycle = () => {
 
   return (
     <div style={boxStyle} onClick={HandleClick}>
-      click
+      CombinedCycle
     </div>
   );
 };
