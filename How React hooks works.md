@@ -12,6 +12,9 @@ The article is consistent of three main sections:
 - [Examples](#Examples) - Examples that demonstrate everything that explained in this article with increasing difficulty
   rate.
 
+Which of you that will finish reading the article to the end, and will really understand the latest example, will no
+longer be surprised by unexpected problems when using hooks in a components with a complicated lifecycle.
+
 The article's is not for starters, and I will assume that you have some experience with React and React hooks.
 
 ## Definitions
@@ -569,4 +572,15 @@ the entire tree goes through the phase of update, and only then the effects are 
 
 </details>
 
+phw! that was tough. if you read and understand everything to this point you can confidently say that you understand
+React hook's nature.
+
+## Component with complicated lifecycle
+
+so why do we need to understand all of this? well, in simple cases you don't,but when dealing with a component with a
+complicated lifecycle you can sometimes get confused by the component's behavior. an example for such component will
+be [react-xarrow](https://github.com/Eliav2/react-xarrows) which needs to trigger callback on different phases to get
+the right dimensions and activate animations callbacks on different phases, for that react-xarrows
+using [react-use-call-onnext-render](https://github.com/Eliav2/react-use-call-onnext-render) to schedule callback for
+later phases.   
 
