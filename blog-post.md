@@ -2,9 +2,6 @@
 
 ![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fiae0s4tnp7yf3yhb2hf.png)
 
-(for better readability and markdown support, you can read this article from the [github repo](https://github.com/Eliav2/how-react-hooks-work))
-
-
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
@@ -15,6 +12,7 @@ The article is consisted of three main sections:
   behave.
 - [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing 
   difficulty rate.
+- [Recap](#recap) - summary with the most important notes.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
 longer be surprised by unexpected problems when using hooks in components with a complicated lifecycle.
@@ -24,6 +22,18 @@ The article is not for starters, and I will assume that you have some experience
 code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
 webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
 GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
+
+#### article mirrors
+
+read in your preferred platform:
+
+- [medium](https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a)
+- [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
+- [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
+
+
+
+For best markdown support I would suggest reading directly from [github repo](https://github.com/Eliav2/how-react-hooks-work).
 
 
 ## Definitions
