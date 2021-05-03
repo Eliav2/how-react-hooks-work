@@ -3,7 +3,11 @@ import { useEffect, useRef } from "react";
 const timeDiff = (prevTime) =>
   Math.round((performance.now() - prevTime) * 1000) / 1000;
 
-export const useLog = (componentName = "", effect = useEffect) => {
+export const useLog = (
+  componentName = "",
+  effect = useEffect,
+  timeCalc = null
+) => {
   // keep track of phase
   const render = useRef(0);
   const call = useRef(0);
@@ -12,10 +16,16 @@ export const useLog = (componentName = "", effect = useEffect) => {
   const execTime = useRef(performance.now());
   execTime.current = performance.now();
 
+  // relative timing or absolute timing?
+  const getTime = () =>
+    timeCalc === "abs"
+      ? Math.round(performance.now() * 1000) / 1000
+      : timeDiff(execTime.current);
+
   const consoleState = () =>
     `{call:${call.current},render:${
       render.current
-    }}(${componentName}) ${timeDiff(execTime.current)}ms`;
+    }}(${componentName}) ${getTime()}ms`;
   const log = (...args) => console.log(...args, consoleState());
 
   effect(() => {

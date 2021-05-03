@@ -7,6 +7,7 @@ import RenderCycle from "./RenderCycle";
 import CombinedCycle from "./CombinedCycle";
 import HomePage from "./Home";
 import MultipleComponents from "./MultipleComponents";
+import AllPhases from "./AllPhases";
 
 export const BasicExamples = {
   HomePage,
@@ -17,6 +18,11 @@ export const BasicExamples = {
     description: "move to other page to see unmount effect",
   },
   EffectVsLayoutEffect,
+  AllPhases: {
+    component: AllPhases,
+    description:
+      "This demonstrates all the different phases combined. after mount another dumy re-render is scheduled",
+  },
 };
 
 export const InterestingExamples = {

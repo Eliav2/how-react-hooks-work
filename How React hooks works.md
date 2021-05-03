@@ -9,7 +9,7 @@ The article is consistent of three main sections:
   the rest of the article.
 - [React Hooks](#React-Hooks) - explains what type of hooks exists, what the difference between them and how they
   behave.
-- [Examples](#Examples) - Examples that demonstrate everything that explained in this article with increasing difficulty
+- [Examples](#Examples) - examples that demonstrate everything that explained in this article with increasing difficulty
   rate.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
@@ -54,7 +54,7 @@ the article.
 
 ## React Hooks
 
-[React hooks](https://reactjs.org/docs/hooks-reference.html) are divided to two types:
+There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 
 - [State hooks](https://reactjs.org/docs/hooks-overview.html#state-hook) - like `useState` or `useReducer`. these hooks
   use and possibly manipulates the parent component stateful logic.
@@ -68,20 +68,47 @@ the article.
 - **Calling state hook from effect(like useEffect) will schedule another render.**
 - **Calling state hook from FC body will schedule another update call.**
 
-### The different phases of a React component
+### Render cycle
 
 these are the phases of a render:
 
-- update call - the moment FC body is executed.
-- useLayoutEffect - it is triggered immediately after all the scheduled mutations has been flushed into to DOM, and
-  before useEffect.  
+#### effects
+
+- update call - the moment FC body is executed. this is always the first phase of a render.
+- useLayoutEffect - it is triggered immediately after all the scheduled update calls executed, just before flushing
+  changes to the browser's DOM and before useEffect.  
   the docs say:
   > Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
-- useEffect - it is triggered after _all_ scheduled updates calls has been executed.
+
+- useEffect - it is triggered after _all_ scheduled updates calls has been executed. this is always the last phase of a
+  render.
 
 after these phases, the 'render' step is completed and then ReactDOM will do the 'commit' step which basically just
 saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not
 relevant for the purpose of this article.
+
+#### cleanup effects
+
+**before** each effect is fired a cleanup function is fired(if scheduled). the cleanup effects are:
+
+- useLayoutEffect cleanup
+- useEffect cleanup
+
+Note - cleanup effect will never fire on first render(because there is no prior effect to cleanup from).
+
+#### Render cycle summary:
+
+per render cycle: Each effect fires the most 1 times, excluding update call which fire at least once.
+
+The effects are fired in this order(excluding first render), and only if was scheduled:
+
+1. updateCall - maybe called several times for a single render, and will occur one after another before any effect!
+2. useLayoutEffect cleanup
+3. useLayoutEffect
+4. useEffect cleanup
+5. useEffect
+
+the AllPhases
 
 ## Examples
 
@@ -230,7 +257,8 @@ const useLog = (componentName = '', effect = useEffect) => {
 };
 ```
 
-`render.current` and `call.current` will 'tick' in the same rate of the parent component because of hooks natures.
+`render.current` and `call.current` will 'tick' in the same rate of the parent component because of hooks natures. This
+is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file.
 
 and usage:
 
@@ -283,6 +311,9 @@ const BasicUnmount = () => {
 };
 ```
 
+when component goes through unmounting step - the update phase does not happen, only the effect fire, in the oder of
+declaration.
+
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
 
 </details>
@@ -316,6 +347,64 @@ const ReactComponent = () => {
 ```
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
+
+</details>
+
+### AllPhases
+
+<details>
+
+This demonstrates all the different phases combined. after mount another dumy re-render is scheduled, we will use 
+absolute timing for this example to see when each phase is executed:
+
+```jsx
+const AllPhases = () => {
+    const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect, "abs");
+    const logUseEffect = useLog("useEffect", useEffect, "abs");
+
+    const [, setState] = useState({});
+    const forceRender = () => setState({});
+
+    useEffect(() => {
+        logUseEffect("useEffect");
+        return () => logUseEffect("useEffect cleanup");
+    });
+    useLayoutEffect(() => {
+        logUseLayoutEffect("useLayoutEffect");
+        return () => logUseLayoutEffect("useLayoutEffect cleanup");
+    });
+    logUseEffect("update");
+
+    // fire only on mount
+    useEffect(() => {
+        logUseEffect(
+            "component fully mounted and render cycle ended. now scheduling another render..."
+        );
+        forceRender();
+        return () => logUseEffect("unmount cleanup");
+    }, []);
+
+    return <div/>;
+    /**
+     * expected logs:
+     *  update {call:1,render:0}(useEffect) 513.565ms
+     *  useLayoutEffect {call:1,render:1}(useLayoutEffect) 517.345ms
+     *  useEffect {call:1,render:1}(useEffect) 527.335ms
+     *  component fully mounted and render cycle ended. now scheduling another render... {call:1,render:1}(useEffect) 527.6ms
+     *  update {call:2,render:1}(useEffect) 529.675ms
+     *  useLayoutEffect cleanup {call:2,render:1}(useLayoutEffect) 530.935ms
+     *  useLayoutEffect {call:2,render:2}(useLayoutEffect) 531.32ms
+     *  useEffect cleanup {call:2,render:1}(useEffect) 531.75ms
+     *  useEffect {call:2,render:2}(useEffect) 532.01ms
+     */
+};
+
+```
+
+this example deeply demonstrate all the different possibly phases while a component renders. make sure you understand
+that before proceeding to next examples.
+
+[code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=AllPhases&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark)
 
 </details>
 
@@ -582,5 +671,29 @@ complicated lifecycle you can sometimes get confused by the component's behavior
 be [react-xarrow](https://github.com/Eliav2/react-xarrows) which needs to trigger callback on different phases to get
 the right dimensions and activate animations callbacks on different phases, for that react-xarrows
 using [react-use-call-onnext-render](https://github.com/Eliav2/react-use-call-onnext-render) to schedule callback for
-later phases.   
+later phases.
+
+## Recap
+
+- on each phase: An entire React Tree goes through [each phase](#render-cycle-summary) in a render cycle one after 
+  another, which means
+  that if one component in the tree is in the useEffect phase for example, all the different components in the tree are
+  currently also in the useEffect phase.
+- for a React Tree: each Component on React tree will fire each phase in the same order of the declaration of the react 
+  component in 
+  the React
+  tree. for example:
+  ```jsx
+  <>
+    <Comp1/>
+    <Comp2/>
+  </>
+  ```
+  the useEffect if `Comp1` will fire and only then the useEffect `Comp2` will fire.
+- On the same React component: each effect from the same type will fire in the order of declaration.
+
+
+That's it! you are now understands what really going on when you asks React to update some state in some component.
+
+If you liked this tutorial make sure to like it and share it! thank you for reading until the end!
 
