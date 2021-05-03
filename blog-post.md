@@ -1,17 +1,15 @@
 # How React hooks work - in depth
 
-![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fiae0s4tnp7yf3yhb2hf.png)
+![React hooks image](https://user-images.githubusercontent.com/47307889/116921331-826bbe80-ac5c-11eb-9f48-d8fbde144b04.png)
 
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
-The article is consisted of three main sections:
+The article consists of three main sections:
 
 - [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for the rest of the article.
-- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they 
-  behave.
-- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing 
-  difficulty rate.
+- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they behave.
+- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing difficulty rate.
 - [Recap](#recap) - summary with the most important notes.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
@@ -31,15 +29,13 @@ read in your preferred platform:
 - [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
 - [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
 
-
-
-For best markdown support I would suggest reading directly from [github repo](https://github.com/Eliav2/how-react-hooks-work).
-
+For best markdown support I would suggest reading directly
+from [github repo](https://github.com/Eliav2/how-react-hooks-work).
 
 ## Definitions
 
-If you are not a React expert, It is strongly recommended to read the definitions section. You can start from the example
-section and then return to this section later if something is not clear.
+If you are not a React expert, It is strongly recommended to read the definitions section. You can start from the
+example section and then return to this section later if something is not clear.
 
 the more important definitions here are: **render**, **update**, **react hook** and **phase**.
 
@@ -55,14 +51,14 @@ the more important definitions here are: **render**, **update**, **react hook** 
   then the tree is passed to the renderer that will update the VDOM, and then will flush the changes into the browser's
   DOM.
 - **update** - when we say that a component 'updates', we are saying that the function component body re-executed
-  (with possibly different props). it is possible that more the one update cycle will occur before a render. examples
-  of the difference between `update` and `render` later.
+  (with possibly different props). it is possible that more the one update cycle will occur before a render. examples of
+  the difference between `update` and `render` later.
 - **react hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks allowed only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase.
 - **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a different point of time in a React component. update:
   [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
 
-Note - These definitions were summarized by me and may not be accurate, but they are sufficient to understand the rest of
-the article.
+Note - These definitions were summarized by me and may not be accurate, but they are sufficient to understand the rest
+of the article.
 
 ## React Hooks
 
@@ -130,7 +126,6 @@ Make sure looking at each example code sandbox(there is a link at the end of eac
 
 ### Basic
 
-
 OK enough words. see the next example.
 
 ```jsx
@@ -171,7 +166,6 @@ what order of logs would you expect when the component mounts? think for a secon
  */
 ```
 
-
 well, the order is:
 
 ```jsx
@@ -185,12 +179,9 @@ well, the order is:
 
 as we explained earlier, the function body fire first and then the effects.
 
-
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
 
-
 ### BasicReverse
-
 
 what will happen if we will replace the effects, does the order will change?
 
@@ -200,10 +191,10 @@ const BasicReverse = () => {
     // ...
     // logic
     useEffect(() => {
-      log("render has finished");
+        log("render has finished");
     });
     useEffect(() => {
-      log("mount has finished");
+        log("mount has finished");
     }, []);
     log("update call");
     return <div/>;
@@ -222,14 +213,12 @@ well, the order does change, and will be:
 ```
 
 this is because effect hooks from the same type(here `useEffect`) are scheduled by React for the same phase and will be
-executed in the order of declaration, this is a common mistake to think that useEffect with an empty dependency array will
-fire on the mount and on a different phase from useEffect with no dependency array.
+executed in the order of declaration, this is a common mistake to think that useEffect with an empty dependency array
+will fire on the mount and on a different phase from useEffect with no dependency array.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
 
-
 ### useLog
-
 
 now let's create a log helper hook `useLog` that will let us keep track of the component phase for later examples:
 
@@ -238,7 +227,7 @@ const useLog = (componentName = '', effect = useEffect) => {
     // keep track of phase
     const render = useRef(0);
     const call = useRef(0);
-    
+
     const consoleState = () =>
         `{call:${call.current},render:${render.current}}(${componentName})`;
     const log = (...args) => console.log(...args, consoleState());
@@ -276,9 +265,7 @@ const Basic = () => {
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
 
-
 ### unmount
-
 
 if we will trigger unmount after mount the logs order will be:
 
@@ -311,37 +298,33 @@ declaration.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
 
-
 ### Effect vs LayoutEffect
-
 
 useLayoutEffect is executed before useEffect:
 
 ```jsx
 const EffectVsLayoutEffect = () => {
-  const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
-  const logUseEffect = useLog("useEffect", useEffect);
-  useEffect(() => {
-    logUseEffect("boom!");
-  });
-  useLayoutEffect(() => {
-    logUseLayoutEffect("boom!");
-  });
-  return <div />;
-  /**
-   * expected logs:
-   *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
-   *    boom! {call:1,render:1}(useEffect) in 13.37ms
-   */
+    const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
+    const logUseEffect = useLog("useEffect", useEffect);
+    useEffect(() => {
+        logUseEffect("boom!");
+    });
+    useLayoutEffect(() => {
+        logUseLayoutEffect("boom!");
+    });
+    return <div/>;
+    /**
+     * expected logs:
+     *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
+     *    boom! {call:1,render:1}(useEffect) in 13.37ms
+     */
 };
 
 ```
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
 
-
 ### AllPhases
-
 
 This demonstrates all the different phases combined. after mount another dumy re-render is scheduled, we will use
 absolute timing for this example to see when each phase is executed:
@@ -395,12 +378,10 @@ that before proceeding to the next examples.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=AllPhases&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark)
 
-
 ### UpdateCycle
 
-
-when you set a state while in the update phase another update phase will be scheduled by React. let's try to force React to
-trigger 10 update calls before rendering.
+when you set a state while in the update phase another update phase will be scheduled by React. let's try to force React
+to trigger 10 update calls before rendering.
 
 ```jsx
 const UpdateCycle = () => {
@@ -447,9 +428,7 @@ that the render phase occurred 0.245ms after the last update call.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=UpdateCycle&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark)
 
-
 ### RenderCycle
-
 
 Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update the
 state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the component.
@@ -501,9 +480,7 @@ we can see that each render cycle comes with an update call.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=RenderCycle&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark)
 
-
 ### CombinedCycle
-
 
 now lets say we want 5 update calls for each render. let's force 3 renders:
 
@@ -561,10 +538,7 @@ const CombinedCycle = () => {
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=CombinedCycle&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark)
 
-
-
 ### MultipleComponents
-
 
 Let's combine the last 3 examples into the common parent.
 
@@ -585,7 +559,6 @@ const Example = () => (
 
 now stop. think. what would you expect? does each component will go through her own update-render phases or maybe the
 update calls will occur one after another and then the effects one after another?
-
 
 the entire tree goes through the phase of the update, and only then the effects are fired.
 
@@ -633,9 +606,7 @@ the entire tree goes through the phase of the update, and only then the effects 
  */
 ```
 
-
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=MultipleComponents&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark)
-
 
 phew! that was tough. if you read and understand everything to this point you can confidently say that you understand
 React hook's nature.
@@ -643,7 +614,7 @@ React hook's nature.
 ## Component with complicated lifecycle
 
 so why do we need to understand all of this? well, in simple cases you don't, but when dealing with a component with a
-complicated lifecycle you can sometimes get confused by the component's behavior. an example of such component will
+complicated lifecycle you can sometimes get confused by the component's behavior. an example of such a component will
 be [react-xarrow](https://github.com/Eliav2/react-xarrows) which needs to trigger callback on different phases to get
 the right dimensions and activate animations callbacks on different phases, for that react-xarrows
 using [react-use-call-onnext-render](https://github.com/Eliav2/react-use-call-onnext-render) to schedule callback for
@@ -651,15 +622,8 @@ later phases.
 
 ## Recap
 
-- on each phase: An entire React Tree goes through [each phase](#render-cycle-summary) in a render cycle one after
-  another, which means
-  that if one component in the tree is in the useEffect phase for example, all the different components in the tree are
-  currently also in the useEffect phase.
-- for a React Tree: on the same phase, each Component on React tree will fire each phase in the same order of the
-  declaration of the react
-  component in
-  the React
-  tree. for example:
+- on each phase: An entire React Tree goes through [each phase](#render-cycle-summary) in a render cycle one after another, which means that if one component in the tree is in the useEffect phase, for example, all the different components in the tree are currently also in the useEffect phase.
+- for a React Tree: on the same phase, each Component on React tree will fire each phase in the same order of the declaration of the react component in the React tree. for example:
   ```jsx
   <>
     <Comp1/>
@@ -668,7 +632,6 @@ later phases.
   ```
   the useEffect if `Comp1` will fire and only then the useEffect `Comp2` will fire.
 - On the same React component: on the same phase, each effect from the same type will fire in the order of declaration.
-
 
 That's it! you now understand what really going on when you asks React to update some state in some component.
 
