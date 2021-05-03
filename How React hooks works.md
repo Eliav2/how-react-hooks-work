@@ -108,7 +108,7 @@ The effects are fired in this order(excluding first render), and only if was sch
 4. useEffect cleanup
 5. useEffect
 
-the AllPhases
+the [AllPhases example](#AllPhases) demonstrates this very well.
 
 ## Examples
 
@@ -679,7 +679,8 @@ later phases.
   another, which means
   that if one component in the tree is in the useEffect phase for example, all the different components in the tree are
   currently also in the useEffect phase.
-- for a React Tree: each Component on React tree will fire each phase in the same order of the declaration of the react 
+- for a React Tree: on the same phase, each Component on React tree will fire each phase in the same order of the 
+  declaration of the react 
   component in 
   the React
   tree. for example:
@@ -690,7 +691,7 @@ later phases.
   </>
   ```
   the useEffect if `Comp1` will fire and only then the useEffect `Comp2` will fire.
-- On the same React component: each effect from the same type will fire in the order of declaration.
+- On the same React component: on the same phase, each effect from the same type will fire in the order of declaration.
 
 
 That's it! you are now understands what really going on when you asks React to update some state in some component.
