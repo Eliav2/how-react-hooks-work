@@ -14,6 +14,11 @@ longer be surprised by unexpected problems when using hooks in components with a
 
 The article is not for starters, and I will assume that you have some experience with React and React hooks.
 
+code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
+webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
+GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
+
+
 ## Definitions
 
 If you are not a React expert, It is strongly recommended to read the definitions section. You can start from the example
@@ -103,10 +108,6 @@ the [AllPhases example](#AllPhases) demonstrates this very well.
 
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
 follow along. these examples are self-explanatory.
-
-code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
-webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
-GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
 
 ### Basic
 
