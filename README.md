@@ -694,3 +694,5 @@ If you liked this tutorial make sure to like it and share it! thank you for read
 [comment]: <> ([React-dev-community]&#40;https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9&#41;)
 
 [comment]: <> ([hashnode]&#40;https://eliav2.hashnode.dev/how-react-hooks-work-in-depth&#41;)
+
+[comment]: <> ([reddit]&#40;https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/&#41;)
