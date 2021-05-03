@@ -112,6 +112,8 @@ the [AllPhases example](#AllPhases) demonstrates this very well.
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
 follow along. these examples are self-explanatory.
 
+Make sure looking at each example code sandbox(there is a link at the end of each example)!
+
 ### Basic
 
 <details open>
@@ -191,12 +193,12 @@ const BasicReverse = () => {
     // ...
     // logic
     useEffect(() => {
-        log('mount has finished');
-    }, []);
-    useEffect(() => {
-        log('render has finished');
+      log("render has finished");
     });
-    log('update call');
+    useEffect(() => {
+      log("mount has finished");
+    }, []);
+    log("update call");
     return <div/>;
 };
 ```
@@ -231,13 +233,9 @@ const useLog = (componentName = '', effect = useEffect) => {
     // keep track of phase
     const render = useRef(0);
     const call = useRef(0);
-
-    // keep track of how much time from update call to end of effect
-    const startTime = performance.now();
-    const callToEffectTime = useRef(0);
-
+    
     const consoleState = () =>
-        `{call:${call.current},render:${render.current}}(${componentName}) ${callToEffectTime.current}ms`;
+        `{call:${call.current},render:${render.current}}(${componentName})`;
     const log = (...args) => console.log(...args, consoleState());
 
     effect(() => {
@@ -250,8 +248,9 @@ const useLog = (componentName = '', effect = useEffect) => {
 };
 ```
 
-`render.current` and `call.current` will 'tick' at the same rate of the parent component because of hooks natures. This
-is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file.
+`render.current` and `call.current` will 'tick' at the same rate of the parent component because of hooks natures.\
+This is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file which includes some logic for 
+time execution logic.
 
 and usage:
 
@@ -318,24 +317,22 @@ declaration.
 useLayoutEffect is executed before useEffect:
 
 ```jsx
-const ReactComponent = () => {
-    useEffect(() => {
-        log('finished render');
-        render.current += 1;
-    });
-    useEffect(() => {
-        log('finished mount');
-    }, []);
-    log('update call');
-    call.current += 1;
-    return <div/>;
+const EffectVsLayoutEffect = () => {
+  const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
+  const logUseEffect = useLog("useEffect", useEffect);
+  useEffect(() => {
+    logUseEffect("boom!");
+  });
+  useLayoutEffect(() => {
+    logUseLayoutEffect("boom!");
+  });
+  return <div />;
+  /**
+   * expected logs:
+   *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
+   *    boom! {call:1,render:1}(useEffect) in 13.37ms
+   */
 };
-
-/**
- * expected logs:
- *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
- *    boom! {call:1,render:1}(useEffect) in 13.37ms
- */
 
 ```
 
