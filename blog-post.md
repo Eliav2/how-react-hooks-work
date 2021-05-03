@@ -1,5 +1,7 @@
 # How React hooks work - in depth
 
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fiae0s4tnp7yf3yhb2hf.png)
+
 (for better readability and markdown support, you can read this article from the [github repo](https://github.com/Eliav2/how-react-hooks-work))
 
 
