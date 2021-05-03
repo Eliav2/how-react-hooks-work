@@ -687,3 +687,10 @@ later phases.
 That's it! you now understand what really going on when you asks React to update some state in some component.
 
 If you liked this tutorial make sure to like it and share it! thank you for reading until the end!
+
+
+[comment]: <> (where this article is published:)
+
+[comment]: <> ([React-dev-community]&#40;https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9&#41;)
+
+[comment]: <> ([hashnode]&#40;https://eliav2.hashnode.dev/how-react-hooks-work-in-depth&#41;)
