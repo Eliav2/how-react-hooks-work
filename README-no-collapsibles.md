@@ -9,8 +9,10 @@ inconsistent and unpredictable. the next article will try to deeply explain and 
 The article is consisted of three main sections:
 
 - [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for the rest of the article.
-- [React Hooks](#React-Hooks) - explains what type of hooks exists, what the difference between them, and how they behave.
-- [Examples](#Examples) - examples that demonstrate everything explained in this article with an increasing difficulty rate.
+- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they 
+  behave.
+- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing 
+  difficulty rate.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
 longer be surprised by unexpected problems when using hooks in components with a complicated lifecycle.
@@ -105,16 +107,17 @@ The effects are fired in this order(excluding the first render), and only if was
 4. useEffect cleanup
 5. useEffect
 
-the [AllPhases example](#AllPhases) demonstrates this very well.
+the [AllPhases example](#allphases) demonstrates this very well.
 
 ## Examples
 
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
 follow along. these examples are self-explanatory.
 
+Make sure looking at each example code sandbox(there is a link at the end of each example)!
+
 ### Basic
 
-<details open>
 
 OK enough words. see the next example.
 
@@ -156,9 +159,6 @@ what order of logs would you expect when the component mounts? think for a secon
  */
 ```
 
-<details>
-
-<summary>Reveal answer</summary>
 
 well, the order is:
 
@@ -173,15 +173,12 @@ well, the order is:
 
 as we explained earlier, the function body fire first and then the effects.
 
-</details>
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
 
-</details>
 
 ### BasicReverse
 
-<details>
 
 what will happen if we will replace the effects, does the order will change?
 
@@ -191,12 +188,12 @@ const BasicReverse = () => {
     // ...
     // logic
     useEffect(() => {
-        log('mount has finished');
-    }, []);
-    useEffect(() => {
-        log('render has finished');
+      log("render has finished");
     });
-    log('update call');
+    useEffect(() => {
+      log("mount has finished");
+    }, []);
+    log("update call");
     return <div/>;
 };
 ```
@@ -218,11 +215,9 @@ fire on the mount and on a different phase from useEffect with no dependency arr
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicreverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark)
 
-</details>
 
 ### useLog
 
-<details>
 
 now let's create a log helper hook `useLog` that will let us keep track of the component phase for later examples:
 
@@ -231,13 +226,9 @@ const useLog = (componentName = '', effect = useEffect) => {
     // keep track of phase
     const render = useRef(0);
     const call = useRef(0);
-
-    // keep track of how much time from update call to end of effect
-    const startTime = performance.now();
-    const callToEffectTime = useRef(0);
-
+    
     const consoleState = () =>
-        `{call:${call.current},render:${render.current}}(${componentName}) ${callToEffectTime.current}ms`;
+        `{call:${call.current},render:${render.current}}(${componentName})`;
     const log = (...args) => console.log(...args, consoleState());
 
     effect(() => {
@@ -250,8 +241,9 @@ const useLog = (componentName = '', effect = useEffect) => {
 };
 ```
 
-`render.current` and `call.current` will 'tick' at the same rate of the parent component because of hooks natures. This
-is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file.
+`render.current` and `call.current` will 'tick' at the same rate of the parent component because of hooks natures.\
+This is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file which includes some logic for
+time execution logic.
 
 and usage:
 
@@ -272,11 +264,9 @@ const Basic = () => {
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor)
 
-</details>
 
 ### unmount
 
-<details>
 
 if we will trigger unmount after mount the logs order will be:
 
@@ -309,43 +299,37 @@ declaration.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=BasicUnmount&module=%2Fsrc%2FexampleFiles%2FBasicUnmount.jsx&theme=dark)
 
-</details>
 
 ### Effect vs LayoutEffect
 
-<details>
 
 useLayoutEffect is executed before useEffect:
 
 ```jsx
-const ReactComponent = () => {
-    useEffect(() => {
-        log('finished render');
-        render.current += 1;
-    });
-    useEffect(() => {
-        log('finished mount');
-    }, []);
-    log('update call');
-    call.current += 1;
-    return <div/>;
+const EffectVsLayoutEffect = () => {
+  const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
+  const logUseEffect = useLog("useEffect", useEffect);
+  useEffect(() => {
+    logUseEffect("boom!");
+  });
+  useLayoutEffect(() => {
+    logUseLayoutEffect("boom!");
+  });
+  return <div />;
+  /**
+   * expected logs:
+   *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
+   *    boom! {call:1,render:1}(useEffect) in 13.37ms
+   */
 };
-
-/**
- * expected logs:
- *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
- *    boom! {call:1,render:1}(useEffect) in 13.37ms
- */
 
 ```
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark)
 
-</details>
 
 ### AllPhases
 
-<details>
 
 This demonstrates all the different phases combined. after mount another dumy re-render is scheduled, we will use
 absolute timing for this example to see when each phase is executed:
@@ -399,11 +383,9 @@ that before proceeding to the next examples.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=AllPhases&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark)
 
-</details>
 
 ### UpdateCycle
 
-<details>
 
 when you set a state while in the update phase another update phase will be scheduled by React. let's try to force React to
 trigger 10 update calls before rendering.
@@ -453,11 +435,9 @@ that the render phase occurred 0.245ms after the last update call.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=UpdateCycle&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark)
 
-</details>
 
 ### RenderCycle
 
-<details>
 
 Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update the
 state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the component.
@@ -509,11 +489,9 @@ we can see that each render cycle comes with an update call.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=RenderCycle&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark)
 
-</details>
 
 ### CombinedCycle
 
-<details>
 
 now lets say we want 5 update calls for each render. let's force 3 renders:
 
@@ -572,11 +550,9 @@ const CombinedCycle = () => {
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=CombinedCycle&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark)
 
 
-</details>
 
 ### MultipleComponents
 
-<details>
 
 Let's combine the last 3 examples into the common parent.
 
@@ -598,9 +574,6 @@ const Example = () => (
 now stop. think. what would you expect? does each component will go through her own update-render phases or maybe the
 update calls will occur one after another and then the effects one after another?
 
-<details>
-
-<summary>Reveal answer</summary>
 
 the entire tree goes through the phase of the update, and only then the effects are fired.
 
@@ -648,11 +621,9 @@ the entire tree goes through the phase of the update, and only then the effects 
  */
 ```
 
-</details>
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=MultipleComponents&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark)
 
-</details>
 
 phew! that was tough. if you read and understand everything to this point you can confidently say that you understand
 React hook's nature.
@@ -699,3 +670,5 @@ If you liked this tutorial make sure to like it and share it! thank you for read
 [comment]: <> ([hashnode]&#40;https://eliav2.hashnode.dev/how-react-hooks-work-in-depth&#41;)
 
 [comment]: <> ([reddit]&#40;https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/&#41;)
+
+[comment]: <> ([medium]&#40;https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a&#41;)

@@ -9,8 +9,10 @@ inconsistent and unpredictable. the next article will try to deeply explain and 
 The article is consisted of three main sections:
 
 - [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for the rest of the article.
-- [React Hooks](#React-Hooks) - explains what type of hooks exists, what the difference between them, and how they behave.
-- [Examples](#Examples) - examples that demonstrate everything explained in this article with an increasing difficulty rate.
+- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they 
+  behave.
+- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing 
+  difficulty rate.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
 longer be surprised by unexpected problems when using hooks in components with a complicated lifecycle.
@@ -105,7 +107,7 @@ The effects are fired in this order(excluding the first render), and only if was
 4. useEffect cleanup
 5. useEffect
 
-the [AllPhases example](#AllPhases) demonstrates this very well.
+the [AllPhases example](#allphases) demonstrates this very well.
 
 ## Examples
 
