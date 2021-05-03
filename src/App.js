@@ -93,7 +93,7 @@ const ExamplePage = () => {
         <br />
         <br />
         <a
-          href="https://github.com/Eliav2/react-use-call-onnext-render"
+          href="https://github.com/Eliav2/how-react-hooks-work"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -101,7 +101,7 @@ const ExamplePage = () => {
         </a>
         <br />
         <a
-          href="https://eliav2.github.io/react-use-call-onnext-render/"
+          href="https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9"
           target="_blank"
           rel="noopener noreferrer"
         >
