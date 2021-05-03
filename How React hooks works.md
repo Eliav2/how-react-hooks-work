@@ -7,8 +7,8 @@ The article's focus is on hooks behavior, and I will assume that you have some e
 
 ### Definitions
 
-If you are not a React expert, It is strongly recommend reading the definitions section. You can start from the 
-example section and then return to this section later if something is not clear.
+If you are not a React expert, It is strongly recommend reading the definitions section. You can start from the example
+section and then return to this section later if something is not clear.
 
 the more important definitions here are: **render**, **update**, **react hook** and **phase**.
 
@@ -18,7 +18,7 @@ the more important definitions here are: **render**, **update**, **react hook** 
 - **React component** - function(or class) that holds stateful logic managed by React lib, that component usually
   returns UI elements based on the stateful logic of the same component.  
   React have class components, and functional components(FC).
-- **React tree** - a tree of React components(like the tree you can see by the React devtools). this is not the same as
+- **React tree** - a tree of React components(like the tree you can see in React devtools). this is not the same as the
   browser's DOM tree.
 - **react renderer** - ReactDOM in web(or react-native in mobile) - a library that knows how to manipulate React tree
   and 'render' it into the browser's DOM in the desired location(in react apps usually to `root` element) . The renderer
@@ -30,14 +30,15 @@ the more important definitions here are: **render**, **update**, **react hook** 
   (with possibly different props). it is possibly that more the one update cycles will occur before a render. examples
   of the difference between `update` and `render` later.
 - **react hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks allowed
-  only inside a body of a function component - hook is `hooked` to the parent component stateful logic. when the parent
-  component updates, also the hook updates, and when the effects of the FC is fired also the effects of the hook is
-  fired.
+  only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the
+  parent component updates are trigger in the same phase, and the effects of the hook and the FC also fires in the same
+  phase.
 - **a component's _phase_** - this is not official term, I'm using this term in this tutorial to describe a different
-  point of time in a React component.
+  point of time in a React component. update:
+  [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
 
-Note - These definitions are my summary and may not be accurate, but they are sufficient to understand the rest of the
-article.
+Note - These definitions was summarized by me and may not be accurate, but they are sufficient to understand the rest of
+the article.
 
 ## React Hooks
 
@@ -67,7 +68,8 @@ these are the phases of a render:
 - useEffect - it is triggered after _all_ scheduled updates calls has been executed.
 
 after these phases, the 'render' step is completed and then ReactDOM will do the 'commit' step which basically just
-saying updating the browser's DOM based on the virtual DOM created by the render step.
+saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not 
+relevant for the purpose of this article.
 
 ## Examples
 
@@ -363,9 +365,9 @@ that the render phase occurred 0.245ms after the last update call.
 
 <details>
 
-Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update
-the state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the
-component. each render cycle will also include at least one update call.  
+Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update the
+state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the component.
+each render cycle will also include at least one update call.  
 let's force 5 render cycles:
 
 ```jsx
