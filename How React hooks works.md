@@ -3,9 +3,18 @@
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
-The article's focus is on hooks behavior, and I will assume that you have some experience with React and React hooks.
+The article is consistent of three main sections:
 
-### Definitions
+- [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for
+  the rest of the article.
+- [React Hooks](#React-Hooks) - explains what type of hooks exists, what the difference between them and how they
+  behave.
+- [Examples](#Examples) - Examples that demonstrate everything that explained in this article with increasing difficulty
+  rate.
+
+The article's is not for starters, and I will assume that you have some experience with React and React hooks.
+
+## Definitions
 
 If you are not a React expert, It is strongly recommend reading the definitions section. You can start from the example
 section and then return to this section later if something is not clear.
@@ -56,7 +65,7 @@ the article.
 - **Calling state hook from effect(like useEffect) will schedule another render.**
 - **Calling state hook from FC body will schedule another update call.**
 
-## The different phases of a React component
+### The different phases of a React component
 
 these are the phases of a render:
 
@@ -68,7 +77,7 @@ these are the phases of a render:
 - useEffect - it is triggered after _all_ scheduled updates calls has been executed.
 
 after these phases, the 'render' step is completed and then ReactDOM will do the 'commit' step which basically just
-saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not 
+saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not
 relevant for the purpose of this article.
 
 ## Examples
