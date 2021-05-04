@@ -1,18 +1,5 @@
 # How React hooks work - in depth
 
-#### article mirrors
-
-read in your preferred platform:
-
-- [Home page](https://eliav2.github.io/how-react-hooks-work/)
-- [medium](https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a)
-- [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
-- [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
-- [reddit](https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/)
-
-For best readability and for most updated version please read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
-Comments and questions can be left on your preferred platform.
-
 ## Intro
 
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
@@ -35,6 +22,19 @@ The article is not for starters, and I will assume that you have some experience
 code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
 webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
 GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
+
+#### article mirrors
+
+read in your preferred platform:
+
+- [Home page](https://eliav2.github.io/how-react-hooks-work/)
+- [medium](https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a)
+- [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
+- [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
+- [reddit](https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/)
+
+For best readability and for most updated version please read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
+Comments and questions can be left on your preferred platform.
 
 ## Definitions
 
