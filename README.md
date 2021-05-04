@@ -33,7 +33,7 @@ read in your preferred platform:
 - [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
 - [reddit](https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/)
 
-For best readability and for most updated version please read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
+For best readability and for most updated version I would strongly recommend read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
 Comments and questions can be left on your preferred platform.
 
 ## Definitions
@@ -55,13 +55,17 @@ the more important definitions here are: **render**, **update**, **React hook** 
   renderer managing a Virtual DOM (VDOM) which is created and updated based on the given React tree.
 - **render** - this is the moment when React tree is created based on the current state.  
   then the tree is passed to the renderer that will update the VDOM, and then will flush the changes into the browser's
-  DOM.
-- **update** - when we say that a component 'updates', we are saying that the function component body re-executed
+  DOM.  
+  render cycle consists of few phases that will be [explained later](#render-cycle).
+- **update** - on of the phases of a render, when we say that a component 'updates', we are saying that the function 
+  component body 
+  re-executed
   (with possibly different props). it is possible that more the one update cycle will occur before a render. examples
   of the difference between `update` and `render` later.
 - **React hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks 
   allowed only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase.
-- **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a different point of time in a React component. update:
+- **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a certain 
+  point of time in a React component. update:
   [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
 
 Note - These definitions were summarized by me and may not be accurate, but they are sufficient to understand the rest of
@@ -77,28 +81,25 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
   these hooks receive a callback function and usually a dependency array. the callback function will be scheduled by
   React to fire on a later _phase_(see definition above). the exact phase is dependent on the effect that was chosen.  
   **Effects from the same type will be executed in the order of declaration.**
-
-### Super Important Notes
-
-- **Calling state hook from effect(like useEffect) will schedule another render.**
-- **Calling state hook from FC body will schedule another update call.**
+  
 
 ### Render cycle
 
 these are the phases of a render:
 
-- update call - the moment FC body is executed. this is always the first phase of a render.
+**FC body**:
 
-#### effects
+- update call - the moment FC body is executed. this is always the first phase of a render. this phases can be repeated
+multiple times if state was updated using a state hook, before proceeding to the effects.
+  
+**effects**:
 
-- useLayoutEffect - it is triggered immediately after all the scheduled update calls executed, just before flushing changes to the browser's DOM and before useEffect.  
-  the docs say:
-  > Updates scheduled inside useLayoutEffect will be flushed synchronously before the browser has a chance to paint.
+- [useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect) - it is triggered immediately
+  (synchronously!) after all the scheduled update calls executed, just before flushing changes to the browser's DOM and before useEffect.
+- [useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect) - it is triggered asynchronously after _all_ scheduled updates has been executed. this is always the last 
+  phase of a render.
 
-- useEffect - it is triggered after _all_ scheduled updates calls has been executed. this is always the last phase of a
-  render.
-
-after these phases, the 'render' step is completed and then ReactDOM will do the 'commit' step which basically just
+after these phases, the 'render' cycle is completed and then ReactDOM will do the 'commit' step which basically just
 saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not
 relevant for the purpose of this article.
 
@@ -124,6 +125,13 @@ The effects are fired in this order(excluding the first render), and only if was
 5. useEffect
 
 the [AllPhases example](#allphases) demonstrates this very well.
+
+### Super Important Notes
+
+- **Calling state hook from effect(like useEffect or useLayoutEffect) will cause React to schedule another render.** 
+  [see example](#updatecycle)
+- **Calling state hook from FC body will cause React to schedule another update call.**   [see example](#rendercycle)
+
 
 ## Examples
 
@@ -268,7 +276,7 @@ const useLog = (componentName = '', effect = useEffect) => {
 
 `render.current` and `call.current` will 'tick' at the same rate of the parent component because of hooks natures.\
 This is simplified `useLog`, you will see different useLog hook in the `UseLog.js` file which includes some logic for 
-time execution logic.
+monitoring execution time.
 
 and usage:
 
@@ -332,23 +340,22 @@ declaration.
 
 <details>
 
-useLayoutEffect is executed before useEffect:
+useLayoutEffect is executed, then useEffect:
 
 ```jsx
 const EffectVsLayoutEffect = () => {
-  const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
-  const logUseEffect = useLog("useEffect", useEffect);
+  const log = useLog("effects", undefined, "abs");
   useEffect(() => {
-    logUseEffect("boom!");
+    log("useEffect!");
   });
   useLayoutEffect(() => {
-    logUseLayoutEffect("boom!");
+    log("useLayoutEffect!");
   });
   return <div />;
   /**
    * expected logs:
-   *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
-   *    boom! {call:1,render:1}(useEffect) in 13.37ms
+   * useLayoutEffect! {call:1,render:0}(effects) 164.565ms
+   * useEffect! {call:1,render:1}(effects) 174.52ms
    */
 };
 
@@ -367,44 +374,48 @@ absolute timing for this example to see when each phase is executed:
 
 ```jsx
 const AllPhases = () => {
-    const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect, "abs");
-    const logUseEffect = useLog("useEffect", useEffect, "abs");
+  const log = useLog("AllPhases", useEffect, "abs");
 
-    const [, setState] = useState({});
-    const forceRender = () => setState({});
+  const [, setState] = useState({});
+  const forceRender = () => setState({});
 
-    useEffect(() => {
-        logUseEffect("useEffect");
-        return () => logUseEffect("useEffect cleanup");
-    });
-    useLayoutEffect(() => {
-        logUseLayoutEffect("useLayoutEffect");
-        return () => logUseLayoutEffect("useLayoutEffect cleanup");
-    });
-    logUseEffect("update");
+  useEffect(() => {
+    log("useEffect");
+    return () => log("useEffect cleanup");
+  });
+  useLayoutEffect(() => {
+    log("useLayoutEffect");
+    return () => log("useLayoutEffect cleanup");
+  });
+  log("update");
 
-    // fire only on mount
-    useEffect(() => {
-        logUseEffect(
+  // fire only on mount
+  useEffect(() => {
+    log(
             "component fully mounted and render cycle ended. now scheduling another render..."
-        );
-        forceRender();
-        return () => logUseEffect("unmount cleanup");
-    }, []);
+    );
+    forceRender();
+    return () => log("unmount cleanup");
+  }, []);
 
-    return <div/>;
-    /**
-     * expected logs:
-     *  update {call:1,render:0}(useEffect) 513.565ms
-     *  useLayoutEffect {call:1,render:1}(useLayoutEffect) 517.345ms
-     *  useEffect {call:1,render:1}(useEffect) 527.335ms
-     *  component fully mounted and render cycle ended. now scheduling another render... {call:1,render:1}(useEffect) 527.6ms
-     *  update {call:2,render:1}(useEffect) 529.675ms
-     *  useLayoutEffect cleanup {call:2,render:1}(useLayoutEffect) 530.935ms
-     *  useLayoutEffect {call:2,render:2}(useLayoutEffect) 531.32ms
-     *  useEffect cleanup {call:2,render:1}(useEffect) 531.75ms
-     *  useEffect {call:2,render:2}(useEffect) 532.01ms
-     */
+  return <div />;
+  /**
+   * expected logs:
+   *    update {call:1,render:0}(AllPhases) 146.36ms
+   *    useLayoutEffect {call:1,render:0}(AllPhases) 150.345ms
+   *    useEffect {call:1,render:1}(AllPhases) 159.425ms
+   *    component fully mounted and render cycle ended. now scheduling another render... {call:1,render:1}(AllPhases) 159.71ms
+   *    update {call:2,render:1}(AllPhases) 162.05ms
+   *    useLayoutEffect cleanup {call:2,render:1}(AllPhases) 163.75ms
+   *    useLayoutEffect {call:2,render:1}(AllPhases) 164.34ms
+   *    useEffect cleanup {call:2,render:1}(AllPhases) 167.435ms
+   *    useEffect {call:2,render:2}(AllPhases) 168.105ms
+   *
+   * when unmount(move to other page for example):
+   *    useLayoutEffect cleanup {call:2,render:2}(AllPhases) 887.375ms
+   *    useEffect cleanup {call:2,render:2}(AllPhases) 892.055ms
+   *    unmount cleanup {call:2,render:2}(AllPhases) 892.31ms
+   */
 };
 
 ```

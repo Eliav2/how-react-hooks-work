@@ -2,19 +2,18 @@ import React, { useEffect, useLayoutEffect } from "react";
 import { useLog } from "../UseLog";
 
 const EffectVsLayoutEffect = () => {
-  const logUseLayoutEffect = useLog("useLayoutEffect", useLayoutEffect);
-  const logUseEffect = useLog("useEffect", useEffect);
+  const log = useLog("effects", undefined, "abs");
   useEffect(() => {
-    logUseEffect("boom!");
+    log("useEffect!");
   });
   useLayoutEffect(() => {
-    logUseLayoutEffect("boom!");
+    log("useLayoutEffect!");
   });
   return <div />;
   /**
    * expected logs:
-   *    boom! {call:1,render:1}(useLayoutEffect) in 4.21ms
-   *    boom! {call:1,render:1}(useEffect) in 13.37ms
+   * useLayoutEffect! {call:1,render:0}(effects) 164.565ms
+   * useEffect! {call:1,render:1}(effects) 174.52ms
    */
 };
 
