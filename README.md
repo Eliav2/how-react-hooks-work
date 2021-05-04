@@ -1,18 +1,29 @@
 # How React hooks work - in depth
 
-(for better readability and markdown support, you can read this article from the [github repo](https://github.com/Eliav2/how-react-hooks-work))
+#### article mirrors
 
+read in your preferred platform:
+
+- [Home page](https://eliav2.github.io/how-react-hooks-work/)
+- [medium](https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a)
+- [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
+- [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
+- [reddit](https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/)
+
+For best readability and for most updated version please read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
+Comments and questions can be left on your preferred platform.
 
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
-The article is consisted of three main sections:
+The article consisted of four main sections:
 
 - [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for the rest of the article.
 - [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they 
   behave.
 - [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing 
   difficulty rate.
+- [Recap](#recap) - summary with the most important notes.
 
 Which of you that will finish reading the article to the end, and will really understand the latest example, will no
 longer be surprised by unexpected problems when using hooks in components with a complicated lifecycle.
@@ -22,7 +33,6 @@ The article is not for starters, and I will assume that you have some experience
 code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
 webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
 GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
-
 
 ## Definitions
 
@@ -72,9 +82,10 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 
 these are the phases of a render:
 
+- update call - the moment FC body is executed. this is always the first phase of a render.
+
 #### effects
 
-- update call - the moment FC body is executed. this is always the first phase of a render.
 - useLayoutEffect - it is triggered immediately after all the scheduled update calls executed, just before flushing changes to the browser's DOM and before useEffect.  
   the docs say:
   > Updates scheduled inside useLayoutEffect will be flushed synchronously before the browser has a chance to paint.
@@ -459,7 +470,7 @@ that the render phase occurred 0.245ms after the last update call.
 <details>
 
 Ok, so we saw what happens when we update the state while in the update phase, but what happens if we try to update the
-state when we are no longer in the update state? well, React will schedule an entire re-render cycle for the component.
+state when we are no longer in the update phase? well, React will schedule an entire re-render cycle for the component.
 each render cycle will also include at least one update call.  
 let's force 5 render cycles:
 
