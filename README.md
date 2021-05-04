@@ -21,9 +21,14 @@ longer be surprised by unexpected problems when using hooks in components with a
 
 The article is not for starters, and I will assume that you have some experience with React and React hooks.
 
-code sandbox of all examples: <https://codesandbox.io/s/github/Eliav2/how-react-hooks-work>   
-webpage of sandbox(examples on full screen): <https://d47vv.csb.app/>  
-GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
+#### Links
+
+- [code sandbox of all examples](https://codesandbox.io/s/github/Eliav2/how-react-hooks-work)
+- [examples page fullscreen](https://d47vv.csb.app/) (no code)
+- [GitHub repo](https://github.com/Eliav2/how-react-hooks-work)
+- have a question? open [discussion](https://github.com/Eliav2/how-react-hooks-work/discussions)
+- something is wrong? open [issue](https://github.com/Eliav2/how-react-hooks-work/issues)
+- you can fix it? submit a [pull request](https://github.com/Eliav2/how-react-hooks-work/pulls)
 
 #### article mirrors
 
