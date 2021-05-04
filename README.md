@@ -1,5 +1,7 @@
 # How React hooks work - in depth
 
+![React hooks image](https://user-images.githubusercontent.com/47307889/116921331-826bbe80-ac5c-11eb-9f48-d8fbde144b04.png)
+
 ## Intro
 
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
