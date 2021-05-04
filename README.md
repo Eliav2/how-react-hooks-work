@@ -209,6 +209,8 @@ well, the order is:
  */
 ```
 
+</details>
+
 as we explained earlier, the function body fire first and then the effects.
 
 [code sandbox](https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark)
