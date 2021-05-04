@@ -13,6 +13,8 @@ read in your preferred platform:
 For best readability and for most updated version please read from [Home page](https://eliav2.github.io/how-react-hooks-work/).
 Comments and questions can be left on your preferred platform.
 
+## Intro
+
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
@@ -39,7 +41,7 @@ GitHub repo: <https://github.com/Eliav2/how-react-hooks-work>
 If you are not a React expert, It is strongly recommended to read the definitions section. You can start from the example
 section and then return to this section later if something is not clear.
 
-the more important definitions here are: **render**, **update**, **react hook** and **phase**.
+the more important definitions here are: **render**, **update**, **React hook** and **phase**.
 
 - **browser DOM** - a tree of HTML elements. These elements make up everything the user sees in the browser, including
   this very page.
@@ -48,14 +50,17 @@ the more important definitions here are: **render**, **update**, **react hook** 
   returns UI elements based on the stateful logic of the same component.  
   React have class components, and functional components(FC).
 - **React tree** - a tree of React components(like the tree you can see in React devtools). this is not the same as the browser's DOM tree.
-- **react renderer** - ReactDOM in web(or react-native in mobile) - a library that knows how to manipulate React tree and 'render' it into the browser's DOM in the desired location(in react apps usually to `root` element). The renderer managing a Virtual DOM (VDOM) which is created and updated based on the given React tree.
+- **React renderer** - ReactDOM in web(or React-native in mobile) - a library that knows how to manipulate React 
+  tree and 'render' it into the browser's DOM in the desired location(in React apps usually to `root` element). The 
+  renderer managing a Virtual DOM (VDOM) which is created and updated based on the given React tree.
 - **render** - this is the moment when React tree is created based on the current state.  
   then the tree is passed to the renderer that will update the VDOM, and then will flush the changes into the browser's
   DOM.
 - **update** - when we say that a component 'updates', we are saying that the function component body re-executed
   (with possibly different props). it is possible that more the one update cycle will occur before a render. examples
   of the difference between `update` and `render` later.
-- **react hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks allowed only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase.
+- **React hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks 
+  allowed only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase.
 - **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a different point of time in a React component. update:
   [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
 
