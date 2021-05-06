@@ -1,2 +1,15 @@
 theme: jekyll-theme-cayman
-markdown: GFM
+source: .
+markdown: span
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  extensions: fenced_code_blocks
+  parse_block_html: true
+  html_to_native: true
+
+# theme: jekyll-theme-cayman
+# markdown: GFM
+
