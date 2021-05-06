@@ -1,6 +1,5 @@
 theme: jekyll-theme-cayman
 source: .
-markdown: span
 highlighter: rouge
 kramdown:
   input: GFM
