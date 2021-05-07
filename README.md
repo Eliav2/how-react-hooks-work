@@ -209,18 +209,23 @@ as we explained earlier, the function body fire first and then the effects.
 
 </details>
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basic&module=%2Fsrc%2FexampleFiles%2FBasic.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -261,18 +266,23 @@ this is because effect hooks from the same type(here `useEffect`) are scheduled 
 executed in the order of declaration, this is a common mistake to think that useEffect with an empty dependency array
 will fire on the mount and on a different phase from useEffect with no dependency array.
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicReverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=basicReverse&module=%2Fsrc%2FexampleFiles%2FBasicReverse.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -322,18 +332,23 @@ const Basic = () => {
  */
 ```
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&initialpath=BasicReverse&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&initialpath=BasicReverse&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?fontsize=14&hidenavigation=1&initialpath=BasicReverse&module=%2Fsrc%2FUseLog.js&theme=dark&view=editor&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -370,18 +385,23 @@ const BasicUnmount = () => {
 when a component goes through unmounting step - the update phase does not happen, only the effect fire, in the order of
 declaration.
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FUnmount.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=Unmount&module=%2Fsrc%2FexampleFiles%2FUnmount.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=Unmount&module=%2Fsrc%2FexampleFiles%2FUnmount.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -409,18 +429,23 @@ const EffectVsLayoutEffect = () => {
 };
 ```
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=EffectVsLayoutEffect&module=%2Fsrc%2FexampleFiles%2FEffectVsLayoutEffect.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -479,18 +504,23 @@ const AllPhases = () => {
 this example deeply demonstrates all the different possible phases while a component renders. make sure you understand
 that before proceeding to the next examples.
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=AllPhases&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=AllPhases&module=%2Fsrc%2FexampleFiles%2FAllPhases.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -544,18 +574,23 @@ const UpdateCycle = () => {
 as we can see, we forced React to re-call the function body 10 times before performing the render. we can also notice
 that the render phase occurred 0.245ms after the last update call.
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=UpdateCycle&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=UpdateCycle&module=%2Fsrc%2FexampleFiles%2FUpdateCycle.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -609,18 +644,23 @@ const RenderCycle = () => {
 
 we can see that each render cycle comes with an update call.
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=RenderCycle&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=RenderCycle&module=%2Fsrc%2FexampleFiles%2FRenderCycle.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -682,18 +722,23 @@ const CombinedCycle = () => {
  */
 ```
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=CombinedCycle&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=CombinedCycle&module=%2Fsrc%2FexampleFiles%2FCombinedCycle.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 </details>
 
@@ -772,18 +817,23 @@ the entire tree goes through the phase of the update, and only then the effects 
 
 </details>
 
-<details>
+[comment]: <> (<details>)
 
 <summary markdown="span"><a href="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=base&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark">Code Sandbox</a></summary>
 
-<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=MultipleComponents&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark&runonclick=1"
-style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-title="example"
-allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+[comment]: <> (<iframe src="https://codesandbox.io/embed/github/Eliav2/how-react-hooks-work/tree/master/?expanddevtools=1&fontsize=14&hidenavigation=1&initialpath=MultipleComponents&module=%2Fsrc%2FexampleFiles%2FMultipleComponents.jsx&theme=dark&runonclick=1")
 
-</details>
+[comment]: <> (style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;")
+
+[comment]: <> (title="example")
+
+[comment]: <> (allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking")
+
+[comment]: <> (sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts")
+
+[comment]: <> (></iframe>)
+
+[comment]: <> (</details>)
 
 
 </details>
