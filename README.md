@@ -63,18 +63,20 @@ the more important definitions here are: **render**, **update**, **React hook** 
 - **React renderer** - ReactDOM in web(or React-native in mobile) - a library that knows how to manipulate React tree
   and 'render' it into the browser's DOM in the desired location(in React apps usually to `root` element). The renderer
   managing a Virtual DOM (VDOM) which is created and updated based on the given React tree.
-- **render** - this is the moment when React tree is created based on the current state.  
-  then the tree is passed to the renderer that will update the VDOM, and then will flush the changes into the browser's
-  DOM.  
-  render cycle consists of few phases that will be [explained later](#render-cycle).
-- **update** - on of the phases of a render, when we say that a component 'updates', we are saying that the function
-  component body re-executed
-  (with possibly different props). it is possible that more the one update cycle will occur before a render. examples of
-  the difference between `update` and `render` later.
+- **render** -  React tree is created based on the current state, then the tree is passed to the renderer that will update the VDOM,
+  and changes will be flushed into the browser's DOM.  
+  render cycle consists of few phases that will be explained [later](#render-cycle).
+  when we say that a component 'render' we are usually talking about the end of the render cycle, after changes are flushed into the 
+  browser's DOM.
+- **update** - when we say that a component 'updates', we are saying that the function component body re-executed
+  (with possibly different props). `update` is one of the phases of a `render`.  multiple update cycles are possibly during a render cycle. examples of
+  the difference between `update` and `render` [later](#render-cycle).
 - **React hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks allowed
-  only inside a body of a function component - hook is `hooked` to the parent component stateful logic. The hook and the
+  only inside a body of a function component - only there it makes sense. hook is `hooked` to the parent component stateful logic. The hook and the
   parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same
-  phase.
+  phase(demonstrated [later](#uselog)).
+  hook are allowed to be called only at the [top level of FC](https://reactjs.org/docs/hooks-rules.html#only-call-hooks-at-the-top-level).
+  the reason for that is because internally[ React relies on the order in which Hooks are called](https://reactjs.org/docs/hooks-rules.html#explanation).
 - **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a certain
   point of time in a React component. update:
   [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
@@ -114,14 +116,15 @@ after these phases, the 'render' cycle is completed and then ReactDOM will do th
 saying updating the browser's DOM based on the virtual DOM created by the render step. the 'commit' phase is not
 relevant for the purpose of this article.
 
-#### cleanup effects
+**cleanup effects**:
 
 **before** each effect is fired a cleanup function is fired(if scheduled). the cleanup effects are:
 
-- useLayoutEffect cleanup
-- useEffect cleanup
+- useLayoutEffects cleanup
+- useEffects cleanup
 
-Note - cleanup effect will never fire on the first render(because there is no prior effect to cleanup from).
+Note - cleanup effect will never fire on the first render(because there is no prior effect to cleanup from), and when
+component unmount only the cleanup effect are fired.
 
 #### Render cycle summary:
 
@@ -130,10 +133,22 @@ per render cycle: Each effect fires the most 1 times, excluding update call whic
 The effects are fired in this order(excluding the first render), and only if was scheduled:
 
 1. updateCall - may be called several times for a single render, and will occur one after another before any effect!
-2. useLayoutEffect cleanup
-3. useLayoutEffect
-4. useEffect cleanup
-5. useEffect
+2. useLayoutEffects cleanup
+3. useLayoutEffects
+4. useEffects cleanup
+5. useEffects
+
+the order on first render:
+
+1. updateCall (possibly multiple times)
+2. useLayoutEffects
+3. useEffects
+
+the order when component unmount(this is not exactly a 'render'):
+
+1. useLayoutEffect cleanup
+2. useEffect cleanup
+
 
 the [AllPhases example](#allphases) demonstrates this very well.
 
@@ -145,8 +160,11 @@ the [AllPhases example](#allphases) demonstrates this very well.
 
 ## Examples
 
+The latest examples  are the most interesting, but in order to understand them one has to understand the first examples first, 
+so make sure follow the examples one after another.
+
 important Note - each line of the code that will come next are part of the tutorial, even the comments. read them all to
-follow along. make sure follow the example one after another.
+follow along.
 
 <details open>
 <summary><h3>Basic</h3></summary>

@@ -132,4 +132,4 @@ const ExamplePage = () => {
   );
 };
 
-export default ExamplePage;
+export default ExamplePage;;
