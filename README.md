@@ -321,7 +321,6 @@ const useLog = (componentName = "", effect = useEffect) => {
 
     effect(() => {
         render.current += 1;
-        callToEffectTime.current = Math.round((performance.now() - startTime) * 100) / 100;
     });
     call.current += 1;
 
