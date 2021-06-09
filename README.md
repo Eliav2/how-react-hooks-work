@@ -102,7 +102,7 @@ these are the phases of a render:
 
 **FC body**:
 
-- update call - the moment FC body is executed. this is always the first phase of a render. this phases can be repeated
+- update call - the moment FC body is executed. This is always the first phase of a render. These phases can be repeated
   multiple times if state was updated using a state hook, before proceeding to the effects.
 
 **effects**:
