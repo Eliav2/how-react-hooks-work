@@ -1,26 +1,35 @@
 # How React hooks work - in depth
 
+_Last update: 19.11.21_
+
+(please note few fixes were made - so if you came from other mirror note that all other mirrors contain inaccuracies)
+
 ![React hooks image](https://user-images.githubusercontent.com/47307889/116921331-826bbe80-ac5c-11eb-9f48-d8fbde144b04.png)
+
+## TLDR;
+
+You have some experience with React and React Hooks, and prefer less words and more code?
+jump over to the [Examples](#examples) section. if something is not clear you can comeback and re-read the explanations.
+
+if this is not the case - please continue from here.
 
 ## Intro
 
 In simple cases, React Hooks will magically do exactly what you meant for, but in other cases, their behavior can feel
 inconsistent and unpredictable. the next article will try to deeply explain and demonstrate React hooks behavior.
 
+Note: this article does not aim to teach all the different hooks available in React, or how to use them - it's main purpose is deep understanding of what actually happens when you call React hook(like `useState` or `useEffect`).
+
 The article consisted of four main sections:
 
-- [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary for
-  the rest of the article.
-- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they
-  behave.
-- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing difficulty
-  rate.
+- [Definitions](#definitions) - this section summarizes important terms in React and web development which necessary to understand the rest of the article.
+- [React Hooks](#react-hooks) - explains what type of hooks exists, what the difference between them, and how they behave.
+- [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing difficulty rate.
 - [Recap](#recap) - summary with the most important notes.
 
-Which of you that will finish reading the article to the end, and will really understand the latest example, will no
-longer be surprised by unexpected problems when using hooks in components with a complicated lifecycle.
-
 The article is not for starters, and I will assume that you have some experience with React and React hooks.
+
+please feel free to re-read sections, and ask your best friend Google when it's needed. also feel free to ask questions on [discussion](https://github.com/Eliav2/how-react-hooks-work/discussions) in the repo if you really feel stuck.
 
 #### Links
 
@@ -33,57 +42,43 @@ The article is not for starters, and I will assume that you have some experience
 
 #### article mirrors
 
-read in your preferred platform:
+All mirrors(at medium,reddit,etc) considered deprecated as i don't update them when needed. please read from Home page
 
 - [Home page](https://eliav2.github.io/how-react-hooks-work/)
-- [medium](https://eliav2.medium.com/how-react-hooks-work-in-depth-61e74b2e169a)
-- [React-dev-community](https://dev.to/eliav2/how-react-hooks-work-in-depth-17o9)
-- [hashnode](https://eliav2.hashnode.dev/how-react-hooks-work-in-depth)
-- [reddit](https://www.reddit.com/r/reactjs/comments/n3uijq/how_react_hooks_work_in_depth/)
-
-For best readability and for most updated version I would strongly recommend read
-from [Home page](https://eliav2.github.io/how-react-hooks-work/). Comments and questions can be left on your preferred
-platform.
 
 ## Definitions
 
-If you are not a React expert, It is strongly recommended to read the definitions section. You can start from the
-example section and then return to this section later if something is not clear.
-
 the more important definitions here are: **render**, **update**, **React hook** and **phase**.
 
-- **browser DOM** - a tree of HTML elements. These elements make up everything the user sees in the browser, including
-  this very page.
+- **browser DOM** - a tree of HTML elements. These elements make up everything the user sees in the browser, including this very page.
 - **React** - A library for manipulating React components.
-- **React component** - function(or class) that holds stateful logic managed by React lib, that component usually
-  returns UI elements based on the stateful logic of the same component.  
-  React have class components, and functional components(FC).
-- **React tree** - a tree of React components(like the tree you can see in React devtools). this is not the same as the
-  browser's DOM tree.
-- **React renderer** - ReactDOM in web(or React-native in mobile) - a library that knows how to manipulate React tree
-  and 'render' it into the browser's DOM in the desired location(in React apps usually to `root` element). The renderer
+- **React component** - function(or class) that holds stateful logic managed by React lib, that component usually returns UI elements based on the stateful logic of the same component.
+React have class components, and functional components(FC).
+- **Stateful logic/state** - variables that hold data of the current state of the component. this data can be changed over time based of events or usage. these variables is stored and managed by React lib(it means for example that when you wish to change the state you will ask react to do it by using setState and React would schedule this change, you cannot directly change these values).
+- **React tree** - a tree of React components(like the tree you can see in React devtools), which is managed and used internally by React. this is not the same as the browser's DOM tree(however, it will later help React create and update the DOM tree on each render).
+- **React renderer** - ReactDOM in web(or React-native in mobile) - a library that knows how to manipulate React tree and 'render' it into the browser's DOM in the desired location(in React apps usually to `root` element). The renderer
   managing a Virtual DOM (VDOM) which is created and updated based on the given React tree.
-- **render** - React tree is created based on the current state, then the tree is passed to the renderer that will
-  update the VDOM, and changes will be flushed into the browser's DOM.  
-  render cycle consists of few phases that will be explained [later](#render-cycle). when we say that a component '
-  render' we are usually talking about the end of the render cycle, after changes are flushed into the browser's DOM.
-- **update** - when we say that a component 'updates', we are saying that the function component body re-executed
-  (with possibly different props). `update` is one of the phases of a `render`. multiple update cycles are possibly
-  during a render cycle. examples of the difference between `update` and `render` [later](#render-cycle).
-- **React hook** - A primitive that shares stateful logic with the parent Component. this is the reason hooks allowed
-  only inside a body of a function component - only there it makes sense. hook is `hooked` to the parent component
-  stateful logic. The hook and the parent component updates are triggers in the same phase, and the effects of the hook
-  and the FC also fire in the same phase(demonstrated [later](#uselog)). hook are allowed to be called only at
-  the [top level of FC](https://reactjs.org/docs/hooks-rules.html#only-call-hooks-at-the-top-level). the reason for that
-  is because
-  internally[ React relies on the order in which Hooks are called](https://reactjs.org/docs/hooks-rules.html#explanation)
-  .
-- **a component's _phase_** - this is not an official term, I'm using this term in this tutorial to describe a certain
-  point of time in a React component. update:
-  [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
+- **phase** - this is not an official term, I'm using this term in this tutorial to describe a certain point of time in a React component. update:  [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
+- **render** - this is a fat one:
+  - **when it happens** - a 'render' will occur on a React component as a result of event which changed the state of this component. the render will propagate down to each child of this component and will trigger a `render` recursively on them as well.
+    for example - `onClick` event which called `setState`.
+    another example is the 'Mount' event, that will trigger a render on a component and any of his children recursively on the first render.
+  - **what it means** - when a 'render' is triggered on a React component - the Component body would be re-executed(or the component render method on class component), this will also execute the function body recursively on each children. it the end of this operations - we get an updated React-tree of this component and all of It's children. this React-tree is passed to the React renderer and the renderer would update the sub dom-tree of this component if needed.
+  - **phases of render**:
+    - **render**:
+      - construction of sub React-tree for the component that was rendered - in this article we call this **update phase**.
+      - passing this React-tree to the rendered that will figure out what's sections of the DOM needs to be updated.
+    - **commit**:
+      - update the DOM using [React’s “diffing” algorithm](https://reactjs.org/docs/reconciliation.html#the-diffing-algorithm).
+      - END of render(the UI is fully updated).
+      - **Effect phase** is now called.
 
-Note - These definitions were summarized by me and may not be accurate, but they are sufficient to understand the rest
-of the article.
+- **update phase** - in this article, when we say that a component 'updates', we are saying that the function component body re-executed. this is part of a render.
+- **Effect phase** - this is the name of the phase after the render ends and the UI is fully updated, React let as execute callbacks on this phase by using `useEffect`,`useLayoutEffect` on function components or `componentDidMount` and `componentDidUpdate` on class components.
+- **React hook** - A primitive that shares stateful logic with the parent Component. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase(demonstrated [later](#uselog)). 
+hook are allowed to be called only at the [top level of FC](https://reactjs.org/docs/hooks-rules.html#only-call-hooks-at-the-top-level). the reason for that is because internally[ React relies on the order in which Hooks are called](https://reactjs.org/docs/hooks-rules.html#explanation).
+
+Note - These definitions were summarized by me and may not be accurate, but they are sufficient to understand the rest of the article
 
 ## React Hooks
 
@@ -100,10 +95,9 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 
 these are the phases of a render:
 
-**FC body**:
+**update**:
 
-- update call - the moment FC body is executed. this is always the first phase of a render. this phases can be repeated
-  multiple times if state was updated using a state hook, before proceeding to the effects.
+- update call - the moment FC body is executed. this is always the first phase of a render. **this phase can be repeated** multiple times if state was updated using a state hook, before proceeding to commit phase and the effects.
 
 **effects**:
 
@@ -173,27 +167,27 @@ OK enough words. see the next example.
 
 ```jsx
 const Basic = () => {
-    // log function helper
-    // this will help up follow the component phase cycle
-    const render = useRef(0);
-    const call = useRef(0);
-    const consoleState = () => `{call:${call.current},render:${render.current}}`;
-    const log = (...args) => console.log(...args, consoleState());
-    // update phase counts
-    call.current += 1;
-    useEffect(() => {
-        render.current += 1;
-    });
+  // log function helper
+  // this will help up follow the component phase cycle
+  const render = useRef(0);
+  const call = useRef(0);
+  const consoleState = () => `{call:${call.current},render:${render.current}}`;
+  const log = (...args) => console.log(...args, consoleState());
+  // update phase counts
+  call.current += 1;
+  useEffect(() => {
+    render.current += 1;
+  });
 
-    //logic
-    useEffect(() => {
-        log("mount has finished");
-    }, []);
-    useEffect(() => {
-        log("render has finished");
-    });
-    log("update call");
-    return <div/>;
+  //logic
+  useEffect(() => {
+    log("mount has finished");
+  }, []);
+  useEffect(() => {
+    log("render has finished");
+  });
+  log("update call");
+  return <div />;
 };
 ```
 
@@ -255,17 +249,17 @@ what will happen if we will replace the effects, does the order will change?
 
 ```jsx
 const BasicReverse = () => {
-    // log function helper
-    // ...
-    // logic
-    useEffect(() => {
-        log("render has finished");
-    });
-    useEffect(() => {
-        log("mount has finished");
-    }, []);
-    log("update call");
-    return <div/>;
+  // log function helper
+  // ...
+  // logic
+  useEffect(() => {
+    log("render has finished");
+  });
+  useEffect(() => {
+    log("mount has finished");
+  }, []);
+  log("update call");
+  return <div />;
 };
 ```
 
@@ -312,19 +306,19 @@ now let's create a log helper hook `useLog` that will let us keep track of the c
 
 ```jsx
 const useLog = (componentName = "", effect = useEffect) => {
-    // keep track of phase
-    const render = useRef(0);
-    const call = useRef(0);
+  // keep track of phase
+  const render = useRef(0);
+  const call = useRef(0);
 
-    const consoleState = () => `{call:${call.current},render:${render.current}}(${componentName})`;
-    const log = (...args) => console.log(...args, consoleState());
+  const consoleState = () => `{call:${call.current},render:${render.current}}(${componentName})`;
+  const log = (...args) => console.log(...args, consoleState());
 
-    effect(() => {
-        render.current += 1;
-    });
-    call.current += 1;
+  effect(() => {
+    render.current += 1;
+  });
+  call.current += 1;
 
-    return log;
+  return log;
 };
 ```
 
@@ -336,11 +330,11 @@ and usage:
 
 ```jsx
 const Basic = () => {
-    const log = useLog();
-    useEffect(() => {
-        log("finished render");
-    });
-    return <div/>;
+  const log = useLog();
+  useEffect(() => {
+    log("finished render");
+  });
+  return <div />;
 };
 
 /**
@@ -377,25 +371,25 @@ if we will trigger unmount after mount the logs order will be:
 
 ```jsx
 const BasicUnmount = () => {
-    const log = useLog();
-    useEffect(() => {
-        log("mount");
-        return () => log("unmount");
-    }, []);
-    useEffect(() => {
-        log("render");
-        return () => log("un-render");
-    });
-    log("update call");
-    return <div>asd</div>;
-    /**
-     * expected logs:
-     *    update call {call:1,render:0}
-     *    mount {call:1,render:1}
-     *    render {call:1,render:1}
-     *    unmount {call:1,render:1}
-     *    un-render {call:1,render:1}
-     */
+  const log = useLog();
+  useEffect(() => {
+    log("mount");
+    return () => log("unmount");
+  }, []);
+  useEffect(() => {
+    log("render");
+    return () => log("un-render");
+  });
+  log("update call");
+  return <div>asd</div>;
+  /**
+   * expected logs:
+   *    update call {call:1,render:0}
+   *    mount {call:1,render:1}
+   *    render {call:1,render:1}
+   *    unmount {call:1,render:1}
+   *    un-render {call:1,render:1}
+   */
 };
 ```
 
@@ -430,19 +424,19 @@ useLayoutEffect is executed, then useEffect:
 
 ```jsx
 const EffectVsLayoutEffect = () => {
-    const log = useLog("effects", undefined, "abs");
-    useEffect(() => {
-        log("useEffect!");
-    });
-    useLayoutEffect(() => {
-        log("useLayoutEffect!");
-    });
-    return <div/>;
-    /**
-     * expected logs:
-     * useLayoutEffect! {call:1,render:0}(effects) 164.565ms
-     * useEffect! {call:1,render:1}(effects) 174.52ms
-     */
+  const log = useLog("effects", undefined, "abs");
+  useEffect(() => {
+    log("useEffect!");
+  });
+  useLayoutEffect(() => {
+    log("useLayoutEffect!");
+  });
+  return <div />;
+  /**
+   * expected logs:
+   * useLayoutEffect! {call:1,render:0}(effects) 164.565ms
+   * useEffect! {call:1,render:1}(effects) 174.52ms
+   */
 };
 ```
 
@@ -475,46 +469,46 @@ absolute timing for this example to see when each phase is executed:
 
 ```jsx
 const AllPhases = () => {
-    const log = useLog("AllPhases", useEffect, "abs");
+  const log = useLog("AllPhases", useEffect, "abs");
 
-    const [, setState] = useState({});
-    const forceRender = () => setState({});
+  const [, setState] = useState({});
+  const forceRender = () => setState({});
 
-    useEffect(() => {
-        log("useEffect");
-        return () => log("useEffect cleanup");
-    });
-    useLayoutEffect(() => {
-        log("useLayoutEffect");
-        return () => log("useLayoutEffect cleanup");
-    });
-    log("update");
+  useEffect(() => {
+    log("useEffect");
+    return () => log("useEffect cleanup");
+  });
+  useLayoutEffect(() => {
+    log("useLayoutEffect");
+    return () => log("useLayoutEffect cleanup");
+  });
+  log("update");
 
-    // fire only on mount
-    useEffect(() => {
-        log("component fully mounted and render cycle ended. now scheduling another render...");
-        forceRender();
-        return () => log("unmount cleanup");
-    }, []);
+  // fire only on mount
+  useEffect(() => {
+    log("component fully mounted and render cycle ended. now scheduling another render...");
+    forceRender();
+    return () => log("unmount cleanup");
+  }, []);
 
-    return <div/>;
-    /**
-     * expected logs:
-     *    update {call:1,render:0}(AllPhases) 146.36ms
-     *    useLayoutEffect {call:1,render:0}(AllPhases) 150.345ms
-     *    useEffect {call:1,render:1}(AllPhases) 159.425ms
-     *    component fully mounted and render cycle ended. now scheduling another render... {call:1,render:1}(AllPhases) 159.71ms
-     *    update {call:2,render:1}(AllPhases) 162.05ms
-     *    useLayoutEffect cleanup {call:2,render:1}(AllPhases) 163.75ms
-     *    useLayoutEffect {call:2,render:1}(AllPhases) 164.34ms
-     *    useEffect cleanup {call:2,render:1}(AllPhases) 167.435ms
-     *    useEffect {call:2,render:2}(AllPhases) 168.105ms
-     *
-     * when unmount(move to other page for example):
-     *    useLayoutEffect cleanup {call:2,render:2}(AllPhases) 887.375ms
-     *    useEffect cleanup {call:2,render:2}(AllPhases) 892.055ms
-     *    unmount cleanup {call:2,render:2}(AllPhases) 892.31ms
-     */
+  return <div />;
+  /**
+   * expected logs:
+   *    update {call:1,render:0}(AllPhases) 146.36ms
+   *    useLayoutEffect {call:1,render:0}(AllPhases) 150.345ms
+   *    useEffect {call:1,render:1}(AllPhases) 159.425ms
+   *    component fully mounted and render cycle ended. now scheduling another render... {call:1,render:1}(AllPhases) 159.71ms
+   *    update {call:2,render:1}(AllPhases) 162.05ms
+   *    useLayoutEffect cleanup {call:2,render:1}(AllPhases) 163.75ms
+   *    useLayoutEffect {call:2,render:1}(AllPhases) 164.34ms
+   *    useEffect cleanup {call:2,render:1}(AllPhases) 167.435ms
+   *    useEffect {call:2,render:2}(AllPhases) 168.105ms
+   *
+   * when unmount(move to other page for example):
+   *    useLayoutEffect cleanup {call:2,render:2}(AllPhases) 887.375ms
+   *    useEffect cleanup {call:2,render:2}(AllPhases) 892.055ms
+   *    unmount cleanup {call:2,render:2}(AllPhases) 892.31ms
+   */
 };
 ```
 
@@ -550,41 +544,41 @@ to trigger 10 update calls before rendering.
 
 ```jsx
 const UpdateCycle = () => {
-    const log = useLog("UpdateCycle");
-    const [, setState] = useState({});
-    const forceUpdate = () => setState({});
-    const updateCalls = useRef(0);
+  const log = useLog("UpdateCycle");
+  const [, setState] = useState({});
+  const forceUpdate = () => setState({});
+  const updateCalls = useRef(0);
 
-    const HandleClick = () => {
-        updateCalls.current = 0;
-        forceUpdate();
-    };
-    updateCalls.current += 1;
-    if (updateCalls.current < 10) forceUpdate();
+  const HandleClick = () => {
+    updateCalls.current = 0;
+    forceUpdate();
+  };
+  updateCalls.current += 1;
+  if (updateCalls.current < 10) forceUpdate();
 
-    useEffect(() => {
-        log("render");
-    });
-    log("update");
+  useEffect(() => {
+    log("render");
+  });
+  log("update");
 
-    return (
-        <div style={boxStyle} onClick={HandleClick}>
-            click
-        </div>
-    );
-    /**
-     * update {call:1,render:0}(UpdateCycle) 0.33ms
-     * update {call:2,render:0}(UpdateCycle) 0.17ms
-     * update {call:3,render:0}(UpdateCycle) 0.03ms
-     * update {call:4,render:0}(UpdateCycle) 0.025ms
-     * update {call:5,render:0}(UpdateCycle) 0.045ms
-     * update {call:6,render:0}(UpdateCycle) 0.04ms
-     * update {call:7,render:0}(UpdateCycle) 0.03ms
-     * update {call:8,render:0}(UpdateCycle) 0.02ms
-     * update {call:9,render:0}(UpdateCycle) 0.03ms
-     * update {call:10,render:0}(UpdateCycle) 0.015ms
-     * render {call:10,render:1}(UpdateCycle) 0.245ms
-     */
+  return (
+    <div style={boxStyle} onClick={HandleClick}>
+      click
+    </div>
+  );
+  /**
+   * update {call:1,render:0}(UpdateCycle) 0.33ms
+   * update {call:2,render:0}(UpdateCycle) 0.17ms
+   * update {call:3,render:0}(UpdateCycle) 0.03ms
+   * update {call:4,render:0}(UpdateCycle) 0.025ms
+   * update {call:5,render:0}(UpdateCycle) 0.045ms
+   * update {call:6,render:0}(UpdateCycle) 0.04ms
+   * update {call:7,render:0}(UpdateCycle) 0.03ms
+   * update {call:8,render:0}(UpdateCycle) 0.02ms
+   * update {call:9,render:0}(UpdateCycle) 0.03ms
+   * update {call:10,render:0}(UpdateCycle) 0.015ms
+   * render {call:10,render:1}(UpdateCycle) 0.245ms
+   */
 };
 ```
 
@@ -622,40 +616,40 @@ let's force 5 render cycles:
 
 ```jsx
 const RenderCycle = () => {
-    const log = useLog("RenderCycle");
-    const [, setState] = useState({});
-    const forceRender = () => setState({});
-    const renderCalls = useRef(0);
+  const log = useLog("RenderCycle");
+  const [, setState] = useState({});
+  const forceRender = () => setState({});
+  const renderCalls = useRef(0);
 
-    const HandleClick = () => {
-        renderCalls.current = 0;
-        forceRender();
-    };
+  const HandleClick = () => {
+    renderCalls.current = 0;
+    forceRender();
+  };
 
-    useEffect(() => {
-        renderCalls.current += 1;
-        if (renderCalls.current < 5) forceRender();
-        log("render");
-    });
-    log("update");
+  useEffect(() => {
+    renderCalls.current += 1;
+    if (renderCalls.current < 5) forceRender();
+    log("render");
+  });
+  log("update");
 
-    return (
-        <div style={boxStyle} onClick={HandleClick}>
-            click
-        </div>
-    );
-    /**
-     * update {call:1,render:0}(RenderCycle) 0.365ms
-     * render {call:1,render:1}(RenderCycle) 0.33ms
-     * update {call:2,render:1}(RenderCycle) 0.26ms
-     * render {call:2,render:2}(RenderCycle) 0.315ms
-     * update {call:3,render:2}(RenderCycle) 0.12ms
-     * render {call:3,render:3}(RenderCycle) 0.25ms
-     * update {call:4,render:3}(RenderCycle) 0.07ms
-     * render {call:4,render:4}(RenderCycle) 0.495ms
-     * update {call:5,render:4}(RenderCycle) 0.055ms
-     * render {call:5,render:5}(RenderCycle) 0.135ms
-     */
+  return (
+    <div style={boxStyle} onClick={HandleClick}>
+      click
+    </div>
+  );
+  /**
+   * update {call:1,render:0}(RenderCycle) 0.365ms
+   * render {call:1,render:1}(RenderCycle) 0.33ms
+   * update {call:2,render:1}(RenderCycle) 0.26ms
+   * render {call:2,render:2}(RenderCycle) 0.315ms
+   * update {call:3,render:2}(RenderCycle) 0.12ms
+   * render {call:3,render:3}(RenderCycle) 0.25ms
+   * update {call:4,render:3}(RenderCycle) 0.07ms
+   * render {call:4,render:4}(RenderCycle) 0.495ms
+   * update {call:5,render:4}(RenderCycle) 0.055ms
+   * render {call:5,render:5}(RenderCycle) 0.135ms
+   */
 };
 ```
 
@@ -689,33 +683,33 @@ now lets say we want 5 update calls for each render. let's force 3 renders:
 
 ```jsx
 const CombinedCycle = () => {
-    const log = useLog("CombinedCycle");
-    const [, setState] = useState({});
-    const forceUpdate = () => setState({});
-    const updateCalls = useRef(0);
-    const renderCalls = useRef(0);
+  const log = useLog("CombinedCycle");
+  const [, setState] = useState({});
+  const forceUpdate = () => setState({});
+  const updateCalls = useRef(0);
+  const renderCalls = useRef(0);
 
-    const HandleClick = () => {
-        updateCalls.current = 0;
-        renderCalls.current = 0;
-        forceUpdate();
-    };
-    updateCalls.current += 1;
-    if (updateCalls.current < 5) forceUpdate();
+  const HandleClick = () => {
+    updateCalls.current = 0;
+    renderCalls.current = 0;
+    forceUpdate();
+  };
+  updateCalls.current += 1;
+  if (updateCalls.current < 5) forceUpdate();
 
-    useEffect(() => {
-        renderCalls.current += 1;
-        if (renderCalls.current < 3) forceUpdate();
-        updateCalls.current = 0;
-        log("render");
-    });
-    log("update");
+  useEffect(() => {
+    renderCalls.current += 1;
+    if (renderCalls.current < 3) forceUpdate();
+    updateCalls.current = 0;
+    log("render");
+  });
+  log("update");
 
-    return (
-        <div style={boxStyle} onClick={HandleClick}>
-            click
-        </div>
-    );
+  return (
+    <div style={boxStyle} onClick={HandleClick}>
+      click
+    </div>
+  );
 };
 /**
  * update {call:1,render:0}(CombinedCycle) 0.085ms
@@ -771,11 +765,11 @@ import RenderCycle from "./RenderCycle";
 import CombinedCycle from "./CombinedCycle";
 
 const Example = () => (
-    <>
-        <UpdateCycle/>
-        <RenderCycle/>
-        <CombinedCycle/>
-    </>
+  <>
+    <UpdateCycle />
+    <RenderCycle />
+    <CombinedCycle />
+  </>
 );
 ```
 
@@ -851,7 +845,6 @@ the entire tree goes through the phase of the update, and only then the effects 
 [comment]: <> (></iframe>)
 
 [comment]: <> (</details>)
-
 
 </details>
 
