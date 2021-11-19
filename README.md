@@ -67,7 +67,7 @@ React have class components, and functional components(FC).
   - **phases of render**:
     - **render**:
       - construction of sub React-tree for the component that was rendered - in this article we call this **update phase**.
-      - passing this React-tree to the rendered that will figure out what's sections of the DOM needs to be updated.
+      - passing this React-tree to the renderer that will figure out what's sections of the DOM needs to be updated.
     - **commit**:
       - update the DOM using [React’s “diffing” algorithm](https://reactjs.org/docs/reconciliation.html#the-diffing-algorithm).
       - END of render(the UI is fully updated).
