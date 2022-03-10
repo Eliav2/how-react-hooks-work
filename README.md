@@ -133,9 +133,9 @@ the [AllPhases example](#allphases) demonstrates this very well.
 
 ### Super Important Notes
 
+- **Calling state hook from FC body will cause React to schedule another update call.** [see example](#updatecycle)
 - **Calling state hook from effect(like useEffect or useLayoutEffect) will cause React to schedule another render.**
-  [see example](#updatecycle)
-- **Calling state hook from FC body will cause React to schedule another update call.** [see example](#rendercycle)
+  [see example](#rendercycle)
 
 ## Examples
 
