@@ -80,13 +80,15 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 
 ### Render cycle
 
-**So what is a render?** 
+**So what is a render?**
 
-  - **when it happens** - a 'render' will occur on a React component as a result of an event that changed the state of this component. the render will propagate down to each child of this component and will trigger a `render` recursively on them as well.
-    for example - `onClick` event which called `setState`.
-    another example is the 'Mount' event, which will trigger a render on a component and any of his children recursively on the first render.
-  - **what it means** - when a 'render' is triggered on a React component - the Component body would be re-executed(or the component render method on class component), this will also execute the function body recursively on each child. At the end of these operations - we get an updated React-tree of this component and all of Its children. this React-tree is passed to the React renderer and the renderer would update the sub dom-tree of this component if needed.
-####phases of render
+- **when it happens** - a 'render' will occur on a React component as a result of an event that changed the state of this component. the render will propagate down to each child of this component and will trigger a `render` recursively on them as well.
+  for example - `onClick` event which called `setState`.
+  another example is the 'Mount' event, which will trigger a render on a component and any of his children recursively on the first render.
+- **what it means** - when a 'render' is triggered on a React component - the Component body would be re-executed(or the component render method on class component), this will also execute the function body recursively on each child. At the end of these operations - we get an updated React-tree of this component and all of Its children. this React-tree is passed to the React renderer and the renderer would update the sub dom-tree of this component if needed.
+
+#### phases of render
+
 - **render**:
   - <small><em> useLayoutEffect cleanup from previous render </em></small>
   - <small><em>useEffect cleanup from previous render</em></small>
@@ -99,8 +101,8 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
   - javascript event loop has ended, and the browser paints the updated DOM(the UI is fully updated).
   - **[useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)** is now called(asynchronously).
 
+Note
 
-Note 
 - the cleanup effect will never fire on the first render(because there is no prior effect to cleanup from).
 - when component unmount only the cleanup effect are fired.
 
