@@ -1,8 +1,8 @@
-# How React hooks work - in depth
+# How React Hooks Work - in depth + React Render Cycle Explained
 
-_Last update: 10.3.22_
+_Last update: 11.3.22_
 
-(please note few fixes were made - so if you came from another mirror note that all other mirrors contain inaccuracies)
+(please note few fixes were made - so if you came from another mirror note that all other mirrors contain inaccuracies, so please always read from [Home page](https://eliav2.github.io/how-react-hooks-work/))
 
 ![React hooks image](https://user-images.githubusercontent.com/47307889/116921331-826bbe80-ac5c-11eb-9f48-d8fbde144b04.png)
 
@@ -27,7 +27,7 @@ This article consists of four main sections:
 - [Examples](#examples) - examples that demonstrate everything explained in this article with an increasing difficulty rate.
 - [Recap](#recap) - summary with the most important notes.
 
-The article is not for starters, and I will assume that you have some experience with React and React hooks.
+This article is not for beginners, and I will assume that you have some experience with React and React hooks.
 
 please feel free to re-read sections, and ask your best friend Google when it's needed. also, feel free to ask questions on [discussion](https://github.com/Eliav2/how-react-hooks-work/discussions) in the repo if you really feel stuck.
 
@@ -52,10 +52,13 @@ the more important definitions here are: **render**, **update**, **React hook** 
 
 - **browser DOM** - a tree of HTML elements. These elements make up everything the user sees in the browser, including this very page.
 - **React** - A library for manipulating React components.
-- **React component** - function(or class) that holds stateful logic managed by React lib, that component usually returns UI elements based on the stateful logic of the same component.
+- **React component** - function(or class) that holds stateful logic managed by React lib, that component usually returns a React Element based on the stateful logic of the same component.
   React have class components, and functional components(FC).
+- **React Element** - React Element is what returned from React function component or from the render method of React class component.
+- **React component VS React Element** - you can think of React component as a recipe for a cake, and the React element as the cake itself. 
+in more technical terms, you can think of React element as instance of React Component, but the constructor would be the render method of class component, or the return statement of FC. 
 - **Stateful logic/state** - variables that hold data of the current state of the component. this data can be changed over time based on events or usage. these variables are stored and managed by React lib(it means for example that when you wish to change the state you will ask React to do it by using setState and React would schedule this change, you cannot directly change these values).
-- **React tree** - a tree of React components(like the tree you can see in React devtools), which is managed and used internally by React. this is not the same as the browser's DOM tree(however, it will later help React create and update the DOM tree on each render).
+- **React tree** - a tree of React Elements(like the tree you can see in React devtools), which is managed and used internally by React. this is not the same as the browser's DOM tree(however, it will later help React create and update the DOM tree on each render).
 - **React renderer** - ReactDOM in web(or React-native in mobile) - a library that knows how to manipulate React tree and 'render' it into the browser's DOM in the desired location(in React apps usually to `root` element). The renderer
   manages a Virtual DOM (VDOM) which is created and updated based on the given React tree.
 - **phase** - this is not an official term, I'm using this term in this tutorial to describe a certain point of time in a React component. update: [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
@@ -82,7 +85,7 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 
 **So what is a render?**
 
-- **when it happens** - a 'render' will occur on a React component as a result of an event that changed the state of this component. the render will propagate down to each child of this component and will trigger a `render` recursively on them as well.
+- **when it happens** - a 'render' is triggered as a result of an event that changed the state of a React component. this trigger will propagate down to each child of this component and will trigger a `render` recursively on them as well.
   for example - `onClick` event which called `setState`.
   another example is the 'Mount' event, which will trigger a render on a component and any of his children recursively on the first render.
 - **what it means** - when a 'render' is triggered on a React component - the Component body would be re-executed(or the component render method on class component), this will also execute the function body recursively on each child. At the end of these operations - we get an updated React-tree of this component and all of Its children. this React-tree is passed to the React renderer and the renderer would update the sub dom-tree of this component if needed.
@@ -90,13 +93,13 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
 #### phases of render
 
 - **render**:
-  - <small><em> useLayoutEffect cleanup from previous render </em></small>
-  - <small><em>useEffect cleanup from previous render</em></small>
   - construction of sub React-tree by recursively calling the React component function body (or the render method on class components)- in this article we call this **update phase**.
   - passing this React-tree to the renderer that will figure out what's sections of the DOM needs to be updated.
 - **commit**:
   - the renderer updates the DOM using [React’s “diffing” algorithm](https://reactjs.org/docs/reconciliation.html#the-diffing-algorithm).
-  - now the browser DOM is fully updated in memory but the browser has not painted it to the UI(the event loop has not yet ended). means that any access to the DOM here will get the updated DOM properties(such location and dimensions), but changes has not flushed to the UI.
+  - now the browser DOM is fully updated in memory but the browser has not painted it to the UI(the event loop has not yet ended). means that any access to the DOM here will get the updated DOM properties(such location and dimensions), but changes has not flushed to the UI just yet.
+  - <small><em> useLayoutEffect cleanup from previous render </em></small>
+  - <small><em>useEffect cleanup from previous render</em></small>
   - **[useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)** is now called.
   - javascript event loop has ended, and the browser paints the updated DOM(the UI is fully updated).
   - **[useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)** is now called(asynchronously).
@@ -108,9 +111,8 @@ Note
 
 #### Render cycle summary:
 
-per render cycle: Each effect fires the most 1 time, excluding update call which fires at least once.
+So to summer up, **there are 5 distinct phases in a render cycle of React**. Most of the time almost all of our code would be executed on the first phase(the update phase), and only small part in the effects phase. We, the developers, can ask React to execute code in each of these phases by providing callback functions and using the different effect hooks(demos later).
 
-The effects are fired in this order(excluding the first render), and only if was scheduled:
 
 1. update - may be called several times for a single render, and will occur one after another before any effect!
 2. useLayoutEffects cleanup
@@ -131,10 +133,11 @@ the order when component unmount(this is not exactly a 'render'):
 
 the [AllPhases example](#allphases) demonstrates this very well.
 
-### Super Important Notes
+### Setting State in different phases
 
-- **Calling state hook from FC body will cause React to schedule another update call.** [see example](#updatecycle)
-- **Calling state hook from effect(like useEffect or useLayoutEffect) will cause React to schedule another render.**
+- **setting the state from update phase(FC body) will cause React to schedule another update call.** [see example](#updatecycle)
+Note: this means that the update phase can repeated multiple times before proceeding to the effects phase if you set the state at the top level of the FC (the function body) -  don't do it.
+- **setting the state from effect(like useEffect or useLayoutEffect) will cause React to schedule another render cycle.**
   [see example](#rendercycle)
 
 ## Examples
