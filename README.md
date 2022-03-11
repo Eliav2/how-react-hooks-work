@@ -63,8 +63,8 @@ in more technical terms, you can think of React element as instance of React Com
   manages a Virtual DOM (VDOM) which is created and updated based on the given React tree.
 - **phase** - this is not an official term, I'm using this term in this tutorial to describe a certain point of time in a React component. update: [also React calls this phase](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects).
 - **render** - Explained in detail later in [Render cycle](#render-cycle) section.
-- **update phase** - in this article when we say that a component 'updates', we are saying that the function component body re-executed. this is a the first step of a render cycle.
-- **Effect phase** - this is the name of the phase after the render ends and the UI is fully updated, React let as execute callbacks on this phase by using **`useEffect`**, **`useLayoutEffect`** on function components or `componentDidMount` and `componentDidUpdate` on class components.
+- **update phase** - in this article when we say that a component 'updates', we are saying that the function component body re-executed. this is a the first phase of a render cycle.
+- **Effects phase** - the effects phase is made of 4 distinct phases. Explained later.
 - **React hook** - A primitive that shares stateful logic with the parent Component. The hook and the parent component updates are triggers in the same phase, and the effects of the hook and the FC also fire in the same phase(demonstrated [later](#uselog)).
   React hook is allowed to be called only at the [top level of FC](https://reactjs.org/docs/hooks-rules.html#only-call-hooks-at-the-top-level). the reason for that is because internally[ React relies on the order in which Hooks are called](https://reactjs.org/docs/hooks-rules.html#explanation).
 
