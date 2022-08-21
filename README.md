@@ -99,9 +99,9 @@ There 2 types of [React hooks](https://reactjs.org/docs/hooks-reference.html):
   - the renderer updates the DOM using [React’s “diffing” algorithm](https://reactjs.org/docs/reconciliation.html#the-diffing-algorithm).
   - now the browser DOM is fully updated in memory but the browser has not painted it to the UI(the event loop has not yet ended). means that any access to the DOM here will get the updated DOM properties(such location and dimensions), but changes has not flushed to the UI just yet.
   - <small><em> useLayoutEffect cleanup from previous render </em></small>
-  - <small><em>useEffect cleanup from previous render</em></small>
   - **[useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)** is now called.
   - javascript event loop has ended, and the browser paints the updated DOM(the UI is fully updated).
+  - <small><em>useEffect cleanup from previous render</em></small>
   - **[useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)** is now called(asynchronously).
 
 Note
