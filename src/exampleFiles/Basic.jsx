@@ -7,6 +7,7 @@ const Basic = () => {
   const call = useRef(0);
   const consoleState = () => `{call:${call.current},render:${render.current}}`;
   const log = (...args) => console.log(...args, consoleState());
+  
   // update phase counts
   call.current += 1;
   useEffect(() => {
